@@ -7,7 +7,7 @@ import json
 
 # test if today is sunday return true if it false if not
 def isSunday():
-    today = datetime.datetime.today()
+    today = datetime.today()
     if today.weekday() == 6:
         return True
     return False
@@ -105,5 +105,18 @@ async def stock():
     with open("data/winners.json","w") as f:
         json.dump(allW, f)
 
+async def setDataZero():
+    with open("players.json","w") as f:
+        json.dump({},f)
+
+    with open("tipPlayers.json","w") as f:
+        json.dump({"tips": []},f)
+
+async def updateSettings():
+    with open("data/nextSettings.json","r") as f:
+        newSettings = json.load(f)
+    with open("settings.json","w") as f:
+        json.dump(newSettings,f)
+    
 
     

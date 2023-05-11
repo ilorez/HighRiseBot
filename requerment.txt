@@ -1,3 +1,2 @@
-schedule
-highrise-bot-sdk
-asyncio
+pip install highrise-bot-sdk
+pip install asyncio

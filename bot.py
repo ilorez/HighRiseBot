@@ -15,13 +15,21 @@ import gameloop
 class Bot(BaseBot):
     
     # start serever
-    async def game_end():
+    async def game_end(self):
         await gameloop.stock()
-        # TODO send message that game end to all players
+        # send message that game end to all players
         players = await getPlayers()
-
-        # TODO delete data from players.json and tipPlayers.json
-        # TODO replace settings with nextWeekSettings.json
+        today = gameloop.get_utc_date()
+        winners = gameloop.allWinners()[today]
+        settings = game.getSettings() 
+        # for p in players:
+        m = [f"\nHey {players[0][1]}!\n\nLast week's game has ended and we have the winners:\n\n{winners['firstP']['name']} won {winners['firstP']['winGolds']} Golds!\n{winners['secondP']['name']} won {winners['secondP']['winGolds']} Golds!\n{winners['thirdP']['name']} won {winners['thirdP']['winGolds']} Golds!",f"\nThis week's game has just started and you can join us by tipping {settings['joinGold']} Golds. Hurry up to secure your spot among the top three!\n\nTip fast to get your chance at the top.\n\nBest of luck and have fun!"]
+        for pm in m:
+            await self.highrise.send_whisper(players[0][0],pm)
+        # elete data from players.json and tipPlayers.json
+        await gameloop.setDataZero()
+        # replace settings with nextSettings.json
+        await gameloop.updateSettings()
 
     async def on_start(self, session_metadata: SessionMetadata):
         settings = game.getSettings() 
@@ -33,12 +41,16 @@ class Bot(BaseBot):
     
     # new user join
     async def on_user_join(self, user: User) -> None:
+        print(f"{user.username} has joined to game !")
         await self.highrise.send_whisper(user.id, f"Hi {user.username},\nWelcome to Gala World, are you ready to take the advanture!\nfor more info try \'/help\'")
         # game loop test when a member join
         # for understand what is game loop see README file
+        if len(list(playersData()))>=3:
+                await Bot.game_end(self)
         if gameloop.isSunday():
             if not gameloop.isStocked():
-                await Bot.game_end()
+                if len(list(playersData()))>=3:
+                    await Bot.game_end(self)
 
     # when user send a msg
     async def on_chat(self, user, message:str):
