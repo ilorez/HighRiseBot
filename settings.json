@@ -32,6 +32,12 @@
       "diamond": [15, 20]
     }
   },
+  "reward": {
+    "room": 30,
+    "firstP": 50,
+    "secondP": 30,
+    "thirdP": 20
+  },
   "botPosition": { "x": 10, "z": 0, "y": 3 },
   "admins": {
     "JeoParty": "6452e89111045823a622c6e1",

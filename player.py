@@ -26,6 +26,7 @@ def isPlayer(id):
 ## Define a function to use as the sorting key
 def sort_key(item):
         return item[2]
+
 async def getPlayers():
     players = []
     data = playersData()
