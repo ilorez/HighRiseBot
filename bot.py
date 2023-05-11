@@ -5,28 +5,47 @@ import asyncio
 from asyncio import run as arun 
 
 
+
 #files
 import responses
 from player import *
 import game
 import gameloop
+import users
 
 
 class Bot(BaseBot):
-    
-    
     # start serever
     async def game_end(self):
         await gameloop.stock()
         # send message that game end to all players
+        settings = game.getSettings()
         players = await getPlayers()
         today = gameloop.get_utc_date()
         winners = gameloop.allWinners()[today]
         settings = game.getSettings() 
-        # for p in players:
-        m = [f"\nHey {players[0][1]}!\n\nLast week's game has ended and we have the winners:\n\n{winners['firstP']['name']} won {winners['firstP']['winGolds']} Golds!\n{winners['secondP']['name']} won {winners['secondP']['winGolds']} Golds!\n{winners['thirdP']['name']} won {winners['thirdP']['winGolds']} Golds!",f"\nThis week's game has just started and you can join us by tipping {settings['joinGold']} Golds. Hurry up to secure your spot among the top three!\n\nTip fast to get your chance at the top.\n\nBest of luck and have fun!"]
-        for pm in m:
-            await self.highrise.send_whisper(players[0][0],pm)
+        winners_id = [winners["firstP"]["id"],winners["secondP"]["id"],winners["thirdP"]["id"]]
+        winners_name = [winners["firstP"]["name"],winners["secondP"]["name"],winners["thirdP"]["name"]]
+        winners_gold = [winners["firstP"]["winGolds"],winners["secondP"]["winGolds"],winners["thirdP"]["winGolds"]]
+        winners_place = ["first","second","third"]
+        
+        # send messageto playes that notice them game end
+        for p in players:
+            allP_m = [f"\nHey {p[1]}!\n\nLast week's game has ended and we have the winners:\n\n{winners['firstP']['name']} won {winners['firstP']['winGolds']} Golds!\n{winners['secondP']['name']} won {winners['secondP']['winGolds']} Golds!\n{winners['thirdP']['name']} won {winners['thirdP']['winGolds']} Golds!",f"\nThis week's game has just started and you can join us by tipping {settings['joinGold']} Golds. Hurry up to secure your spot among the top three!\n\nTip fast to get your chance at the top.\n\nBest of luck and have fun!"]
+
+            if p[0] in winners_id:
+                continue
+            for pm in allP_m:
+                await self.highrise.send_whisper(p[0],pm)
+        #send message to winners
+        for i in range(len(winners_id)):
+            win_m = [f"Hey {winners_name[i]}!\n\nCongratulations on winning {winners_place[i]} place in last week's game! You've won {winners_gold[i]} golds, and the owner will be tipping you today.\n",f"\nIf you haven't received your golds after 5:00PM, please send a message to {list(settings['owner'])[0]} and let them know.\n\nKeep up the great work, and we hope to see you in the next game!\n\nBest regards."]
+            for mp in win_m:
+                await self.highrise.send_whisper(winners_id[i],mp)
+        #TODO send message to owenrs to tip to winners
+        owener_me = "Hi owner tip to players"
+        await self.highrise.send_whisper(settings['owner'],mp)
+
         # elete data from players.json and tipPlayers.json
         await gameloop.setDataZero()
         # replace settings with nextSettings.json
@@ -43,13 +62,18 @@ class Bot(BaseBot):
     # new user join
     async def on_user_join(self, user: User) -> None:
         print(f"{user.username} has joined room !")
-        await self.highrise.send_whisper(user.id, f"Hi {user.username},\nWelcome to Gala World, are you ready to take the advanture!\nfor more info try \'/help\'")
+        if await users.isOldUser(user.id):
+            await self.highrise.send_whisper(user.id, f"\nWelcome {user.username}")
+        else:
+            await users.addUser(user)
+            await self.highrise.send_whisper(user.id, f"\nWelcome {user.username},\nWelcome to Gala World, are you ready to take the advanture!\nfor more info try \'/help\'")
         # game loop test when a member join
         # for understand what is game loop see README file
         if gameloop.isSunday():
             if not gameloop.isStocked():
                 if len(list(playersData()))>=3:
-                    await Bot.game_end(self)
+                    pass
+                    # await Bot.game_end(self)
     # on user leave
     async def on_user_leave(self, user: User) :
         print(f"{user.username} has leaved room !")
