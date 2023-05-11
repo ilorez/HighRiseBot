@@ -4,26 +4,41 @@ from highrise import __main__
 import asyncio
 from asyncio import run as arun 
 
+
 #files
 import responses
 from player import *
 import game
-
+import gameloop
 
 
 class Bot(BaseBot):
-    # start serever
     
+    # start serever
+    async def game_end():
+        await gameloop.stock()
+        # TODO send message that game end to all players
+        players = await getPlayers()
+
+        # TODO delete data from players.json and tipPlayers.json
+        # TODO replace settings with nextWeekSettings.json
+
     async def on_start(self, session_metadata: SessionMetadata):
         settings = game.getSettings() 
-        await self.highrise.chat("Hello world!")
+        await self.highrise.chat("GM players")
         pos = settings["botPosition"]
         await self.highrise.walk_to(Position(pos['x'],pos['z'],pos['y']))
         print('Server is started')
+        
     
     # new user join
     async def on_user_join(self, user: User) -> None:
         await self.highrise.send_whisper(user.id, f"Hi {user.username},\nWelcome to Gala World, are you ready to take the advanture!\nfor more info try \'/help\'")
+        # game loop test when a member join
+        # for understand what is game loop see README file
+        if gameloop.isSunday():
+            if not gameloop.isStocked():
+                await Bot.game_end()
 
     # when user send a msg
     async def on_chat(self, user, message:str):
