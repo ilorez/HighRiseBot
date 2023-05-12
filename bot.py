@@ -16,7 +16,12 @@ import users
 
 class Bot(BaseBot):
     # start serever
+    async def send_message(self,user_id,message):
+        if await users.inRoom(user_id):
+            await self.highrise.send_whisper(user_id,message)
+        
     async def game_end(self):
+        
         await gameloop.stock()
         # send message that game end to all players
         settings = game.getSettings()
@@ -28,23 +33,33 @@ class Bot(BaseBot):
         winners_name = [winners["firstP"]["name"],winners["secondP"]["name"],winners["thirdP"]["name"]]
         winners_gold = [winners["firstP"]["winGolds"],winners["secondP"]["winGolds"],winners["thirdP"]["winGolds"]]
         winners_place = ["first","second","third"]
-        
+        await asyncio.sleep(0.2)
         # send messageto playes that notice them game end
         for p in players:
+            # if user is not in room or if user is one of winner don't do anything
+            if (not await users.inRoom(p[0]))or(p[0] in winners_id):
+                continue
+            
             allP_m = [f"\nHey {p[1]}!\n\nLast week's game has ended and we have the winners:\n\n{winners['firstP']['name']} won {winners['firstP']['winGolds']} Golds!\n{winners['secondP']['name']} won {winners['secondP']['winGolds']} Golds!\n{winners['thirdP']['name']} won {winners['thirdP']['winGolds']} Golds!",f"\nThis week's game has just started and you can join us by tipping {settings['joinGold']} Golds. Hurry up to secure your spot among the top three!\n\nTip fast to get your chance at the top.\n\nBest of luck and have fun!"]
 
             if p[0] in winners_id:
                 continue
             for pm in allP_m:
                 await self.highrise.send_whisper(p[0],pm)
+                await asyncio.sleep(0.2)
         #send message to winners
         for i in range(len(winners_id)):
+            if not await users.inRoom(winners_id[i]):
+                continue
             win_m = [f"Hey {winners_name[i]}!\n\nCongratulations on winning {winners_place[i]} place in last week's game! You've won {winners_gold[i]} golds, and the owner will be tipping you today.\n",f"\nIf you haven't received your golds after 5:00PM, please send a message to {list(settings['owner'])[0]} and let them know.\n\nKeep up the great work, and we hope to see you in the next game!\n\nBest regards."]
             for mp in win_m:
                 await self.highrise.send_whisper(winners_id[i],mp)
-        #TODO send message to owenrs to tip to winners
-        owener_me = "Hi owner tip to players"
-        await self.highrise.send_whisper(settings['owner'],mp)
+                await asyncio.sleep(0.2)
+        #send message to owenrs to tip to winners
+        if await users.inRoom(settings['owner'][list(settings['owner'])[0]]):
+            owener_me = "\nHi owner tip to winners use [/winners] to see usernames of winners"
+            # await self.highrise.send_whisper(settings['owner'][list(settings['owner'])[0]],owener_me)
+            Bot.send_message(self,settings['owner'][list(settings['owner'])[0]],owener_me)
 
         # elete data from players.json and tipPlayers.json
         await gameloop.setDataZero()
@@ -57,11 +72,17 @@ class Bot(BaseBot):
         pos = settings["botPosition"]
         await self.highrise.walk_to(Position(pos['x'],pos['z'],pos['y']))
         print('Server is started')
+        # add users that in room to inRoom.json
+        users_r = await self.highrise.get_room_users()
+        for u in users_r.content:
+            await users.joinedRoom(u[0])
+        
         
     
     # new user join
     async def on_user_join(self, user: User) -> None:
         print(f"{user.username} has joined room !")
+        await users.joinedRoom(user)
         if await users.isOldUser(user.id):
             await self.highrise.send_whisper(user.id, f"\nWelcome {user.username}")
         else:
@@ -69,14 +90,15 @@ class Bot(BaseBot):
             await self.highrise.send_whisper(user.id, f"\nWelcome {user.username},\nWelcome to Gala World, are you ready to take the advanture!\nfor more info try \'/help\'")
         # game loop test when a member join
         # for understand what is game loop see README file
+        # await Bot.game_end(self)
         if gameloop.isSunday():
             if not gameloop.isStocked():
                 if len(list(playersData()))>=3:
-                    pass
-                    # await Bot.game_end(self)
+                    await Bot.game_end(self)
     # on user leave
     async def on_user_leave(self, user: User) :
         print(f"{user.username} has leaved room !")
+        await users.leavedRoom(user.id)
 
     # when user send a msg
     async def on_chat(self, user, message:str):
@@ -107,7 +129,7 @@ class Bot(BaseBot):
                addPlayer(user)
                await self.highrise.send_whisper(user.id,"Welcome, You can start playing now:)")
             else:
-                await self.highrise.send_whisper(user.id,f"\nYou need to tip {settings['joinGold']}G first.\nif you have a probleme try Use:\n/probleme")
+                await self.highrise.send_whisper(user.id,f"\nYou need to tip {settings['joinGold']}G first.\nif you have a probleme try Use: [/probleme]")
             return
         # leaderboard command
         if message.startswith("lb"):
@@ -152,14 +174,14 @@ class Bot(BaseBot):
 
         # /p problme command
         if message.startswith(("p","probleme")):
-            m = "\nIf you have a probleme send to one of admins message al let him know.\n\n"
+            m = "\nIf you have a probleme send to one of admins message and let him know.\n\nAdmins:\n"
             for admin in settings['admins']:
                 m+= f"-{admin}"
-                if isOnline(settings['admins'][admin]):
-                    m+= " [Online]"
+                if await users.inRoom(settings['admins'][admin]):
+                    m+= " [In Room]"
                 
                 m+="\n"
-            await self.highrise.send_whisper(user.id,"We got your problme, we will contact with you when fix the probleme")
+            await self.highrise.send_whisper(user.id,m)
             return
 
 
