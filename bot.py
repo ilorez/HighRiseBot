@@ -107,7 +107,7 @@ class Bot(BaseBot):
                addPlayer(user)
                await self.highrise.send_whisper(user.id,"Welcome, You can start playing now:)")
             else:
-                await self.highrise.send_whisper(user.id,f"\nYou need to tip {settings['joinGold']}G first.\nif you have a probleme try Use:\n/p [write your probleme here]")
+                await self.highrise.send_whisper(user.id,f"\nYou need to tip {settings['joinGold']}G first.\nif you have a probleme try Use:\n/probleme")
             return
         # leaderboard command
         if message.startswith("lb"):
@@ -151,18 +151,15 @@ class Bot(BaseBot):
         #! -----
 
         # /p problme command
-        if message.startswith("p"):
-            message = message[1:]
-            if len(message) > 100:
-                await self.highrise.send_whisper(user.id,"You need to keep your message short then 100 caracter")
-                return
+        if message.startswith(("p","probleme")):
+            m = "\nIf you have a probleme send to one of admins message al let him know.\n\n"
             for admin in settings['admins']:
-                    #  send problme to admins
-                await self.highrise.send_whisper(settings['admins'][admin],f"Hi {admin}!\nusername:{user.username}\nid:{user.id}\nProblme:{message}")
-                    #  send to admins other admins
-                await self.highrise.send_whisper(settings['admins'][admin],f"this message has sended to {tuple(settings['admins'].keys())}")
-                    #  send to user that the message has sended succsfull
-                await self.highrise.send_whisper(user.id,"We get you problme, we will contact with you when fix the probleme")
+                m+= f"-{admin}"
+                if isOnline(settings['admins'][admin]):
+                    m+= " [Online]"
+                
+                m+="\n"
+            await self.highrise.send_whisper(user.id,"We got your problme, we will contact with you when fix the probleme")
             return
 
 
