@@ -27,7 +27,7 @@ class Bot(BaseBot):
         winners_id = [winners["firstP"]["id"],winners["secondP"]["id"],winners["thirdP"]["id"]]
         winners_name = [winners["firstP"]["name"],winners["secondP"]["name"],winners["thirdP"]["name"]]
         winners_gold = [winners["firstP"]["winGolds"],winners["secondP"]["winGolds"],winners["thirdP"]["winGolds"]]
-        winners_place = ["first","second","third"]
+        winners_place = ["1st","2nd","3rd"]
         
         # send messageto playes that notice them game end
         for p in players:
@@ -37,11 +37,13 @@ class Bot(BaseBot):
                 continue
             for pm in allP_m:
                 await self.highrise.send_whisper(p[0],pm)
+                await asyncio.sleep(0.2)
         #send message to winners
         for i in range(len(winners_id)):
             win_m = [f"Hey {winners_name[i]}!\n\nCongratulations on winning {winners_place[i]} place in last week's game! You've won {winners_gold[i]} golds, and the owner will be tipping you today.\n",f"\nIf you haven't received your golds after 5:00PM, please send a message to {list(settings['owner'])[0]} and let them know.\n\nKeep up the great work, and we hope to see you in the next game!\n\nBest regards."]
             for mp in win_m:
                 await self.highrise.send_whisper(winners_id[i],mp)
+                await asyncio.sleep(0.2)
         #TODO send message to owenrs to tip to winners
         owener_me = "Hi owner tip to players"
         await self.highrise.send_whisper(settings['owner'],mp)
@@ -56,6 +58,7 @@ class Bot(BaseBot):
         await self.highrise.chat("GM players")
         pos = settings["botPosition"]
         await self.highrise.walk_to(Position(pos['x'],pos['z'],pos['y']))
+        await self.highrise.send_whisper("6452e89111045823a622c6e1","server started")
         print('Server is started')
         
     
@@ -67,8 +70,10 @@ class Bot(BaseBot):
         else:
             await users.addUser(user)
             await self.highrise.send_whisper(user.id, f"\nWelcome {user.username},\nWelcome to Gala World, are you ready to take the advanture!\nfor more info try \'/help\'")
+        await asyncio.sleep(0.2)
         # game loop test when a member join
         # for understand what is game loop see README file
+        # await Bot.game_end(self)
         if gameloop.isSunday():
             if not gameloop.isStocked():
                 if len(list(playersData()))>=3:
