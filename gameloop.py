@@ -91,11 +91,11 @@ stock:
 --> players.json in allDataPlayers.json
 --> winners from players.json in winners.json
 '''
-async def stock():
+async def stock(today):
     players = playersData()
     allW = allWinners()
     allPD = allDataPlayers()
-    today = get_utc_date()
+    # today = get_utc_date()
 
     allPD[today] = players
     allW[today] = await winnersTemp()
@@ -117,6 +117,13 @@ async def updateSettings():
         newSettings = json.load(f)
     with open("settings.json","w") as f:
         json.dump(newSettings,f)
-    
+
+# this function setLastweek in nxetSetting.json
+async def setLastWeek(date):
+    with open("data/nextSettings.json","r") as f:
+        data = json.load(f)
+    data["lastWeek"] = date
+    with open("data/nextSettings.json","w") as f:
+        json.dump(data,f)
 
     

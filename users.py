@@ -1,8 +1,8 @@
 import json
 
-# import and convert data/allUsersHasJoined.json to dict
+# import and convert data/allUsers.json to dict
 async def getAllUsers():
-    with open("data/allUsersHasJoined.json","r") as f:
+    with open("data/allUsers.json","r") as f:
         users = json.load(f)
     return users
 
@@ -17,7 +17,7 @@ async def isOldUser(id):
 async def addUser(user):
     users = await getAllUsers()
     users['users'].append([user.id,user.username])
-    with open("data/allUsersHasJoined.json","w") as f:
+    with open("data/allUsers.json","w") as f:
         json.dump(users,f)
 
 #get data from inRoom.json
@@ -53,6 +53,10 @@ async def leavedRoom(id):
             onlines["users"].remove(u)
     with open("data/inRoom.json","w") as f:
         json.dump(onlines,f)
+
+async def setRoomZero():
+    with open("data/inRoom.json","w") as f:
+        json.dump({"users": []},f)
 
 
 

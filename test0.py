@@ -1,1 +1,10 @@
-m = ["\nHey Ali!\n\nLast week's game has ended and we have the winners:\n\nSimo won 200 gold!\nAsmae won 15 gold!\nJeo won 50 /gold!","\nThis week's game has just started and you can join us by tipping 50 gold. Hurry up to secure your spot among the top three!\n\nTip fast to get your chance at the top.\n\nBest of luck and have fun!"]
+def leavedRoom(id):
+   
+    onlines = {"users":[["1","11"],["2","22"],["3","33"]]}
+    for u in onlines["users"]:
+        if u[1] == id:
+            onlines["users"].remove(u)
+    print(onlines)
+
+
+leavedRoom("22")
