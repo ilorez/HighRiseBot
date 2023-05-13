@@ -151,9 +151,26 @@ class Bot(BaseBot):
                 await users.addUser(user)
             return
         # start command add player from tip list to game
-        
+        if message.startswith("admins"):
+            m = "\nAdmins:\n"
+            for admin in settings['admins']:
+                m+= f"- {admin}"
+                if await users.inRoom(settings['admins'][admin]):
+                    m+= " [In Room]"
+                m+="\n"
+            await Bot.send_message(self,user.id,m)
+            return
+        if message.startswith("winners"):
+            m = "\nWinners:\n"
+            for winner in (await gameloop.getWinnersTap(gameloop.get_utc_date())):
+                m+= f"- {winner[1]}"
+                if await users.inRoom(winner[0]):
+                    m+= " [In Room]"
+                m+="\n"
+            await Bot.send_message(self,user.id,m)
+            return
         if message.startswith("start"):
-            print(1)
+            
             if (isPlayer(user.id)):
                 await Bot.send_message(self,user.id,"you are already start!")
                 return
