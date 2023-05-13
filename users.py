@@ -53,7 +53,7 @@ async def leavedRoom(id):
             onlines["users"].remove(u)
     with open("data/inRoom.json","w") as f:
         json.dump(onlines,f)
-
+# set inRoom.json in deault state no data on it
 async def setRoomZero():
     with open("data/inRoom.json","w") as f:
         json.dump({"users": []},f)

@@ -126,4 +126,12 @@ async def setLastWeek(date):
     with open("data/nextSettings.json","w") as f:
         json.dump(data,f)
 
-    
+# this functio return winners of last week [[id,name,postion,gold],[id,name,postion,gold],[id,name,postion,gold]]
+async def getWinnersTap(date):
+    wins = allWinners()[date]
+    tabN = ["firstP","secondP","thirdP"]
+    pos = ["1st","2nd","3rd"]
+    Tab = []
+    for i in range (len(tabN)):
+        Tab.append([wins[tabN[i]]["id"],wins[tabN[i]]["name"],pos[i],wins[tabN[i]]["winGolds"]])
+    return Tab

@@ -1,1 +1,23 @@
-{"604cece829a2f97e24d97211": {"name": "C_G", "lastFish": "2023-05-13 17:52:26", "lastChop": "2023-05-13 17:51:16", "tools": {"axe": "wood", "rod": "wood"}, "resourses": {"wood": 3, "fish": 1, "coins": 3}}, "6452e89111045823a622c6e1": {"name": "JeoParty", "lastFish": "2023-05-13 17:51:55", "lastChop": "2023-05-13 17:51:16", "tools": {"axe": "wood", "rod": "wood"}, "resourses": {"wood": 2, "fish": 0, "coins": 7}}, "5fe9e558545dd4e2630f091d": {"name": "Russi_ian", "lastFish": "2023-05-13 17:57:02", "lastChop": "2023-05-13 17:58:37", "tools": {"axe": "wood", "rod": "wood"}, "resourses": {"wood": 8, "fish": 0, "coins": 4}}, "6405c780cfb2ebd6d271e061": {"name": "_.PewPew._", "lastFish": "2023-05-13 17:58:20", "lastChop": "2023-05-13 17:58:13", "tools": {"axe": "iron", "rod": "wood"}, "resourses": {"wood": 13, "fish": 6, "coins": 5}}}
+{
+  "6452e89111045823a622c6e1": {
+    "name": "JeoParty",
+    "lastFish": "2023-05-12 23:13:17",
+    "lastChop": "2023-05-12 23:13:14",
+    "tools": { "axe": "wood", "rod": "wood" },
+    "resourses": { "wood": 4, "fish": 0, "coins": 87 }
+  },
+  "61897928ecd328de4bec8339": {
+    "name": "Shelooock",
+    "lastFish": "2023-05-08 21:27:51",
+    "lastChop": "2023-05-08 21:28:00",
+    "tools": { "axe": "wood", "rod": "wood" },
+    "resourses": { "wood": 5, "fish": 0, "coins": 68 }
+  },
+  "5fe9e558545dd4e2630f091d": {
+    "name": "Russi_ian",
+    "lastFish": "2023-05-08 22:39:03",
+    "lastChop": "2023-05-08 22:32:28",
+    "tools": { "axe": "wood", "rod": "wood" },
+    "resourses": { "wood": 7, "fish": 0, "coins": 15 }
+  }
+}

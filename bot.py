@@ -12,6 +12,7 @@ from player import *
 import game
 import gameloop
 import users
+import pendingM
 
 
 class Bot(BaseBot):
@@ -21,17 +22,19 @@ class Bot(BaseBot):
             await self.highrise.send_whisper(user_id,message)
     
     async def game_end(self):
+        await pendingM.setPendingM()
         today = gameloop.get_utc_date()
         await gameloop.stock(today)
         # send message that game end to all players
         settings = game.getSettings()
         players = await getPlayers()
+        settings = game.getSettings()
         winners = gameloop.allWinners()[today]
-        settings = game.getSettings() 
         winners_id = [winners["firstP"]["id"],winners["secondP"]["id"],winners["thirdP"]["id"]]
         winners_name = [winners["firstP"]["name"],winners["secondP"]["name"],winners["thirdP"]["name"]]
         winners_gold = [winners["firstP"]["winGolds"],winners["secondP"]["winGolds"],winners["thirdP"]["winGolds"]]
         winners_place = ["1st","2nd","3rd"]
+
         await asyncio.sleep(1)
         # send messageto playes that notice them game end
         for p in players:
@@ -42,6 +45,7 @@ class Bot(BaseBot):
             for pm in allP_m:
                 await self.highrise.send_whisper(p[0],pm)
                 await asyncio.sleep(1)
+            await pendingM.removePen(p[0])
         #send message to winners
         for i in range(len(winners_id)):
             if not await users.inRoom(winners_id[i]):
@@ -50,11 +54,14 @@ class Bot(BaseBot):
             for mp in win_m:
                 await self.highrise.send_whisper(winners_id[i],mp)
                 await asyncio.sleep(1)
+            await pendingM.removePen(winners_id[i])
         #send message to owenrs to tip to winners
-        if await users.inRoom(settings['owner'][list(settings['owner'])[0]]):
+        owner_id = settings['owner'][list(settings['owner'])[0]]
+        if await users.inRoom(owner_id):
             owener_me = "\nHi owner tip to winners use [/winners] to see usernames of winners"
-            # await self.highrise.send_whisper(settings['owner'][list(settings['owner'])[0]],owener_me)
-            await Bot.send_message(self,settings['owner'][list(settings['owner'])[0]],owener_me)
+            # await self.highrise.send_whisper(owner_id,owener_me)
+            await Bot.send_message(self,owner_id,owener_me)
+            await pendingM.removePen(owner_id)
 
         # elete data from players.json and tipPlayers.json
         await gameloop.setDataZero()
@@ -79,22 +86,46 @@ class Bot(BaseBot):
     
     # new user join
     async def on_user_join(self, user: User) -> None:
-        
         print(f"{user.username} has joined room !")
+        settings = game.getSettings() 
         await users.joinedRoom(user)
         if await users.isOldUser(user.id):
             await Bot.send_message(self,user.id,f"\nWelcome {user.username}")
-            
         else:
-            
-            await Bot.send_message(self,user.id, f"\nWelcome {user.username},\nWelcome to Gala World, are you ready to take the advanture!\nfor more info try \'/help\'")
+             await Bot.send_message(self,user.id, f"\nWelcome {user.username},\nWelcome to Gala World, are you ready to take the advanture!\nfor more info try \'/help\'")
         # game loop test when a member join
         # for understand what is game loop see README file
         # await Bot.game_end(self)
         if gameloop.isSunday():
             if not gameloop.isStocked():
                 if len(list(playersData()))>=3:
-                    await Bot.game_end(self)
+                    pass
+                    # await Bot.game_end(self)
+        if await pendingM.isPending(user.id):
+            winners = await gameloop.getWinnersTap(gameloop.get_utc_date())
+            wins_id = [winners[i][0] for i in range(len(winners))]
+            if user.id == settings['owner'][list(settings['owner'])[0]]:
+                await Bot.send_message(self,user.id,"Tip to /winners")
+                
+            elif user.id in wins_id:
+                for w in winners:
+                    if w[0] == user.id:
+                        pos = w[2]
+                        golds = w[3]
+                
+                win_m = [f"Hey {user.username}!\n\nCongratulations on winning {pos} place in last week's game! You've won {golds} golds, and the owner will be tipping you today.\n",f"\nIf you haven't received your golds after 5:00PM, please send a message to {list(settings['owner'])[0]} and let them know.\n\nKeep up the great work, and we hope to see you in the next game!\n\nBest regards."]
+                for mp in win_m:
+                    await Bot.send_message(self,user.id,mp)
+                    await asyncio.sleep(1)
+                
+            else:
+                allP_m = [f"\nHey {user.username}!\n\nLast week's game has ended and we have the winners:\n\n{winners[0][1]} won {winners[0][3]} Golds!\n{winners[1][1]} won {winners[1][3]} Golds!\n{winners[2][1]} won {winners[2][3]} Golds!",f"\nThis week's game has just started and you can join us by tipping {settings['joinGold']} Golds. Hurry up to secure your spot among the top three!\n\nTip fast to get your chance at the top.\n\nBest of luck and have fun!"]
+                for pm in allP_m:
+                    await Bot.send_message(self,user.id,pm)
+                    await asyncio.sleep(1)
+            await pendingM.removePen(user.id)
+                
+                
     # on user leave
     async def on_user_leave(self, user: User) :
         print(f"{user.username} has leaved room !")
@@ -112,11 +143,13 @@ class Bot(BaseBot):
         message = message[1:]
         settings = game.getSettings() 
         # help or h command
+
         if message.startswith(('h','help')):
             resp = [f"\nInfo:\n 1. The game restart every sunday at 7:00 UTC \n 2. you need to collect wood and fishe and sell them for coins.\n 3. The player sorts in the leaderboard depense on coins.\n4. Tip {settings['joinGold']}G to join game\n5. [/reward] for reward info.","\nCommands:\n [/start]: for join game after tip\n [/inventory]: show inventory\n [/buy]: for buy new tools\n [/chop]: to collect woods\n [/fish]: to collect fishes\n [/sell]: to sell wood and fish for coins\n [/lb]: for show leaderboard"]
             for ligne in resp:
                 await Bot.send_message(self,user.id,ligne)
                 await asyncio.sleep(0.01)
+            # add users to allUsers.json if it not in it 
             if not (await users.isOldUser(user.id)):
                 await users.addUser(user)
             return
