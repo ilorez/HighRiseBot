@@ -4,8 +4,6 @@ from highrise import __main__
 import asyncio
 from asyncio import run as arun 
 
-
-
 #files
 import responses
 from player import *
@@ -13,7 +11,6 @@ import game
 import gameloop
 import users
 import pendingM
-
 
 class Bot(BaseBot):
     # start serever
