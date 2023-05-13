@@ -96,8 +96,8 @@ class Bot(BaseBot):
         if gameloop.isSunday():
             if not gameloop.isStocked():
                 if len(list(playersData()))>=3:
-                    pass
-                    # await Bot.game_end(self)
+                    # pass
+                    await Bot.game_end(self)
         if await pendingM.isPending(user.id):
             winners = await gameloop.getWinnersTap(gameloop.get_utc_date())
             wins_id = [winners[i][0] for i in range(len(winners))]
