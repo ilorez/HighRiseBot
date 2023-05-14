@@ -135,3 +135,23 @@ async def getWinnersTap(date):
     for i in range (len(tabN)):
         Tab.append([wins[tabN[i]]["id"],wins[tabN[i]]["name"],pos[i],wins[tabN[i]]["winGolds"]])
     return Tab
+
+# return days:hours:min:seconds that to week end
+async def toWeekEnd():
+    today = datetime.now(timezone.utc)
+    if True:
+        days = 6
+    else:
+        days = 6 - today.weekday()
+    hours = 22 - today.hour
+    minutes = 59 - today.minute
+    seconds = 59 - today.second
+    time_str = f"{days} days {hours:02d}:{minutes:02d}:{seconds:02d}"
+    return time_str
+    
+
+# return tippesd golds (reward golds)
+async def tippsed():
+    settings = getSettings()
+    allGolds = len(playersData()) * settings["joinGold"]
+    return allGolds
