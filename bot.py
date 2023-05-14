@@ -99,7 +99,7 @@ class Bot(BaseBot):
                     # pass
                     await Bot.game_end(self)
         if await pendingM.isPending(user.id):
-            winners = await gameloop.getWinnersTap(gameloop.get_utc_date())
+            winners = await gameloop.getWinnersTap(settings["lastWeek"])
             wins_id = [winners[i][0] for i in range(len(winners))]
             if user.id == settings['owner'][list(settings['owner'])[0]]:
                 await Bot.send_message(self,user.id,"Tip to /winners")
@@ -162,7 +162,7 @@ class Bot(BaseBot):
             return
         if message.startswith("winners"):
             m = "\nWinners:\n"
-            for winner in (await gameloop.getWinnersTap(gameloop.get_utc_date())):
+            for winner in (await gameloop.getWinnersTap(settings["lastWeek"])):
                 m+= f"- {winner[1]}"
                 if await users.inRoom(winner[0]):
                     m+= " [In Room]"
