@@ -18,6 +18,7 @@ class Bot(BaseBot):
         if await users.inRoom(user_id):
             await self.highrise.send_whisper(user_id,message)
     
+    
     async def game_end(self):
         await pendingM.setPendingM()
         today = gameloop.get_utc_date()
