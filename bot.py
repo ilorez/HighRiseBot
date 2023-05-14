@@ -142,7 +142,7 @@ class Bot(BaseBot):
         message = message[1:]
         settings = game.getSettings() 
         # help or h command
-
+        #! info methods
         if message.startswith(('h','help')):
             resp = [f"\nInfo:\n 1. The game restart every sunday at 7:00 UTC \n 2. you need to collect wood and fishe and sell them for coins.\n 3. The player sorts in the leaderboard depense on coins.\n4. Tip {settings['joinGold']}G to join game\n5. [/reward] for reward info.","\nCommands:\n [/start]: for join game after tip\n [/inventory]: show inventory\n [/buy]: for buy new tools\n [/chop]: to collect woods\n [/fish]: to collect fishes\n [/sell]: to sell wood and fish for coins\n [/lb]: for show leaderboard"]
             for ligne in resp:
@@ -152,6 +152,7 @@ class Bot(BaseBot):
             if not (await users.isOldUser(user.id)):
                 await users.addUser(user)
             return
+        
         # start command add player from tip list to game
         if message.startswith("admins"):
             m = "\nAdmins:\n"
@@ -171,17 +172,6 @@ class Bot(BaseBot):
                 m+="\n"
             await Bot.send_message(self,user.id,m)
             return
-        if message.startswith("start"):
-            
-            if (isPlayer(user.id)):
-                await Bot.send_message(self,user.id,"you are already start!")
-                return
-            if isTip(user.username):
-               addPlayer(user)
-               await Bot.send_message(self,user.id,"Welcome, You can start playing now:)")
-            else:
-                await Bot.send_message(self,user.id,f"\nYou need to tip {settings['joinGold']}G first.\nif you have a probleme try Use: [/probleme]")
-            return
         # leaderboard command
         if message.startswith("lb"):
             re_tap = await leaderBorad(user.id)
@@ -196,6 +186,25 @@ class Bot(BaseBot):
                 re_m += f"\n  - {p[1]} [{p[2]}Gala]"
             await Bot.send_message(self,user.id,re_m)
             return
+        # time betwenn now to week end
+        if message.startswith("end"):
+            pass
+        # golds that tipsed
+        if message.startswith("tipsed"):
+            pass
+         #! ----------------------
+        if message.startswith("start"):
+            
+            if (isPlayer(user.id)):
+                await Bot.send_message(self,user.id,"you are already start!")
+                return
+            if isTip(user.username):
+               addPlayer(user)
+               await Bot.send_message(self,user.id,"Welcome, You can start playing now:)")
+            else:
+                await Bot.send_message(self,user.id,f"\nYou need to tip {settings['joinGold']}G first.\nif you have a probleme try Use: [/probleme]")
+            return
+        
         #! admin
         # admin manging players 
         if message.startswith('admin'):
@@ -300,15 +309,23 @@ class Bot(BaseBot):
             await Bot.send_message(self,user.id,f"You get {await game.sellItems(user.id)}Gala")
             return
         #! ---------------
-        #! other comand that for fun in room
+        #! other commands that for fun in room
         if message.startswith("dance"):
-            emotes = ['emote-kiss', 'emote-no', 'emote-sad', 'emote-yes', 'emote-laughing', 'emote-hello', 'emote-wave', 'emote-shy', 'emote-tired', 'emoji-angry', 'idle-loop-sitfloor', 'emoji-thumbsup', 'emote-lust', 'emoji-cursing', 'emote-greedy', 'emoji-flex', 'emoji-gagging', 'emoji-celebrate', 'dance-macarena', 'dance-tiktok8', 'dance-blackpink', 'emote-model', 'dance-tiktok2', 'dance-pennywise', 'emote-bow', 'dance-russian', 'emote-curtsy', 'emote-snowball', 'emote-hot', 'emote-snowangel', 'emote-charging', 'dance-shoppingcart', 'emote-confused', 'idle-enthusiastic', 'emote-telekinesis', 'emote-float', 'emote-teleporting', 'emote-swordfight', 'emote-maniac', 'emote-energyball', 'emote-snake', 'idle_singing', 'emote-frog', 'emote-superpose', 'emote-cute', 'dance-tiktok9', 'dance-weird', 'dance-tiktok10', 'emote-pose7', 'emote-pose8', 'idle-dance-casual', 'emote-pose1', 'emote-pose3', 'emote-pose5', 'emote-cutey']
-            roomUsers = (await self.highrise.get_room_users()).content
-            for roomUser, _ in roomUsers:
-                em = random.choice(emotes)
-                await self.highrise.send_emote(em, roomUser.id)
-            return
+            dances = ['dance-macarena', 'dance-tiktok8', 'dance-blackpink', 'dance-tiktok2', 'dance-pennywise', 'dance-russian', 'dance-shoppingcart', 'dance-tiktok9', 'dance-weird', 'dance-tiktok10', 'idle-dance-casual']
+            dance = random.choice(dances)
+            parts_m = message.split()
+            try:
+                if len(parts_m) >= 2:
+                    if parts_m[1] == "all":
+                        roomUsers = (await self.highrise.get_room_users()).content
+                        for roomUser, _ in roomUsers:
+                            await self.highrise.send_emote(dance, roomUser.id)
+                        return
+                await self.highrise.send_emote(dance, user.id)
+                return
+            except:print("user not in room")
         #! ---------------
+        
         
         # get respone from respons.py
         await Bot.send_message(self,user.id,responses.get_response(message))

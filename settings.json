@@ -1,1 +1,34 @@
-{"joinGold": 50, "wood": 10, "fish": 1, "chopToolSleep": 4, "fishToolSleep": 4, "toolsPrix": {"axe": {"wood": 5, "iron": 100, "gold": 500, "diamond": 1000}, "rod": {"wood": 5, "iron": 110, "gold": 550, "diamond": 1050}}, "toolRange": {"axe": {"wood": [1, 10], "iron": [5, 20], "gold": [20, 50], "diamond": [50, 100]}, "rod": {"wood": [1, 5], "iron": [5, 10], "gold": [10, 15], "diamond": [15, 20]}}, "reward": {"room": 30, "firstP": 50, "secondP": 30, "thirdP": 20}, "botPosition": {"x": 10, "z": 0, "y": 3}, "admins": {"JeoParty": "6452e89111045823a622c6e1", "Shelooock": "61897928ecd328de4bec8339", "Russi_ian": "5fe9e558545dd4e2630f091d"}, "owner": {"JeoParty": "6452e89111045823a622c6e1"}, "lastWeek": "2023/05/14"}
+{
+  "joinGold": 50,
+  "wood": 10,
+  "fish": 1,
+  "chopToolSleep": 4,
+  "fishToolSleep": 4,
+  "toolsPrix": {
+    "axe": { "wood": 5, "iron": 100, "gold": 500, "diamond": 1000 },
+    "rod": { "wood": 5, "iron": 110, "gold": 550, "diamond": 1050 }
+  },
+  "toolRange": {
+    "axe": {
+      "wood": [1, 10],
+      "iron": [5, 20],
+      "gold": [20, 50],
+      "diamond": [50, 100]
+    },
+    "rod": {
+      "wood": [1, 5],
+      "iron": [5, 10],
+      "gold": [10, 15],
+      "diamond": [15, 20]
+    }
+  },
+  "reward": { "room": 30, "firstP": 50, "secondP": 30, "thirdP": 20 },
+  "botPosition": { "x": 11, "z": 0, "y": 2.7 },
+  "admins": {
+    "JeoParty": "6452e89111045823a622c6e1",
+    "Shelooock": "61897928ecd328de4bec8339",
+    "Russi_ian": "5fe9e558545dd4e2630f091d"
+  },
+  "owner": { "JeoParty": "6452e89111045823a622c6e1" },
+  "lastWeek": "2023/05/14"
+}
