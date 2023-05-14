@@ -303,10 +303,15 @@ class Bot(BaseBot):
         #! other comand that for fun in room
         if message.startswith("dance"):
             emotes = ['emote-kiss', 'emote-no', 'emote-sad', 'emote-yes', 'emote-laughing', 'emote-hello', 'emote-wave', 'emote-shy', 'emote-tired', 'emoji-angry', 'idle-loop-sitfloor', 'emoji-thumbsup', 'emote-lust', 'emoji-cursing', 'emote-greedy', 'emoji-flex', 'emoji-gagging', 'emoji-celebrate', 'dance-macarena', 'dance-tiktok8', 'dance-blackpink', 'emote-model', 'dance-tiktok2', 'dance-pennywise', 'emote-bow', 'dance-russian', 'emote-curtsy', 'emote-snowball', 'emote-hot', 'emote-snowangel', 'emote-charging', 'dance-shoppingcart', 'emote-confused', 'idle-enthusiastic', 'emote-telekinesis', 'emote-float', 'emote-teleporting', 'emote-swordfight', 'emote-maniac', 'emote-energyball', 'emote-snake', 'idle_singing', 'emote-frog', 'emote-superpose', 'emote-cute', 'dance-tiktok9', 'dance-weird', 'dance-tiktok10', 'emote-pose7', 'emote-pose8', 'idle-dance-casual', 'emote-pose1', 'emote-pose3', 'emote-pose5', 'emote-cutey']
-            roomUsers = (await self.highrise.get_room_users()).content
-            for roomUser, _ in roomUsers:
-                em = random.choice(emotes)
-                await self.highrise.send_emote(em, roomUser.id)
+            em = random.choice(emotes)
+            parts_m = message.split()
+            if len(parts_m) >= 2:
+                if parts_m[1] == "all":
+                    roomUsers = (await self.highrise.get_room_users()).content
+                    for roomUser, _ in roomUsers:
+                        await self.highrise.send_emote(em, roomUser.id)
+                    return
+            await self.highrise.send_emote(em, user.id)
             return
         #! ---------------
         
