@@ -188,10 +188,17 @@ class Bot(BaseBot):
             return
         # time betwenn now to week end
         if message.startswith("end"):
-            pass
+            time = await gameloop.toWeekEnd()
+            m = f"\ndate to game end is:\n{time}"
+            await Bot.send_message(self,user.id,m)
+            return
         # golds that tipsed
-        if message.startswith("tipsed"):
-            pass
+        if message.startswith("prize"):
+            golds = await gameloop.tippsed()
+            m = f"\nAll Golds in Tip:\n{golds} Golds"
+            await Bot.send_message(self,user.id,m)
+            return
+
          #! ----------------------
         if message.startswith("start"):
             
