@@ -1,4 +1,6 @@
-# ignore all files that start with test or end with test
-test*.*
-*test.*
-__pycache__/
+# Ignore files and directories starting with "test"
+test*
+# Ignore files and directories ending with "test"
+*test
+# Ignore __pycache__ directories
+__pycache__
