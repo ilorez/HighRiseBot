@@ -3,6 +3,7 @@ from highrise.models import SessionMetadata, User
 from highrise import __main__
 import asyncio
 from asyncio import run as arun 
+import random
 
 #files
 import responses
@@ -18,7 +19,7 @@ class Bot(BaseBot):
         if await users.inRoom(user_id):
             await self.highrise.send_whisper(user_id,message)
     
-    
+
     async def game_end(self):
         await pendingM.setPendingM()
         today = gameloop.get_utc_date()
@@ -299,7 +300,15 @@ class Bot(BaseBot):
             await Bot.send_message(self,user.id,f"You get {await game.sellItems(user.id)}Gala")
             return
         #! ---------------
-        
+        #! other comand that for fun in room
+        if message.startswith("dance"):
+            emotes = ['emote-kiss', 'emote-no', 'emote-sad', 'emote-yes', 'emote-laughing', 'emote-hello', 'emote-wave', 'emote-shy', 'emote-tired', 'emoji-angry', 'idle-loop-sitfloor', 'emoji-thumbsup', 'emote-lust', 'emoji-cursing', 'emote-greedy', 'emoji-flex', 'emoji-gagging', 'emoji-celebrate', 'dance-macarena', 'dance-tiktok8', 'dance-blackpink', 'emote-model', 'dance-tiktok2', 'dance-pennywise', 'emote-bow', 'dance-russian', 'emote-curtsy', 'emote-snowball', 'emote-hot', 'emote-snowangel', 'emote-charging', 'dance-shoppingcart', 'emote-confused', 'idle-enthusiastic', 'emote-telekinesis', 'emote-float', 'emote-teleporting', 'emote-swordfight', 'emote-maniac', 'emote-energyball', 'emote-snake', 'idle_singing', 'emote-frog', 'emote-superpose', 'emote-cute', 'dance-tiktok9', 'dance-weird', 'dance-tiktok10', 'emote-pose7', 'emote-pose8', 'idle-dance-casual', 'emote-pose1', 'emote-pose3', 'emote-pose5', 'emote-cutey']
+            roomUsers = (await self.highrise.get_room_users()).content
+            for roomUser, _ in roomUsers:
+                em = random.choice(emotes)
+                await self.highrise.send_emote(em, roomUser.id)
+            return
+        #! ---------------
         
         # get respone from respons.py
         await Bot.send_message(self,user.id,responses.get_response(message))
