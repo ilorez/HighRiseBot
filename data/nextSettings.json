@@ -23,7 +23,7 @@
     }
   },
   "reward": { "room": 30, "firstP": 50, "secondP": 30, "thirdP": 20 },
-  "botPosition": { "x": 10, "z": 0, "y": 3 },
+  "botPosition": { "x": 11, "z": 0, "y": 2.7 },
   "admins": {
     "JeoParty": "6452e89111045823a622c6e1",
     "Shelooock": "61897928ecd328de4bec8339",
