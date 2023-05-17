@@ -119,7 +119,7 @@ async def fish(id):
     return f"To fishing again run /fish after {time_str}min"
 
 
-    
+
 
 
 
