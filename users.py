@@ -7,10 +7,10 @@ async def getAllUsers():
     return users
 
 # test if user old old new
-async def isOldUser(id):
+async def isOldUser(search,index=0):
     users = await getAllUsers()
     for user in users["users"]:
-        if user[0] == id:
+        if user[index] == search:
             return True
     return False
 # new user
@@ -57,6 +57,14 @@ async def leavedRoom(id):
 async def setRoomZero():
     with open("data/inRoom.json","w") as f:
         json.dump({"users": []},f)
+
+# return id of user using username
+async def getIdOldUser(username):
+    users = await getAllUsers()
+    for user in users["users"]:
+        if user[1] == username:
+            return user[0]
+    return False
 
 
 

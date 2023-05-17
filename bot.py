@@ -12,6 +12,7 @@ import game
 import gameloop
 import users
 import pendingM
+import owner_admin
 
 class Bot(BaseBot):
     # start serever
@@ -221,7 +222,8 @@ class Bot(BaseBot):
 
             parts_m = message.split()
             if not len(parts_m) == 3:
-                await Bot.send_message(self,user.id,"admin commands is:\n-/admin add [player usrname]\n-/admin remove [player usrname]")
+                await Bot.send_message(self,user.id,"admin commands is:\n-/admin add [username]\n-/admin remove [username]")
+                return
             try:
                 if (parts_m[1]=="add"):
                     addTipPlayer(parts_m[2])
@@ -238,7 +240,37 @@ class Bot(BaseBot):
             except:await Bot.send_message(self,user.id,"no command found")
             return
         #! -----
-
+        #! owner
+        if message.startswith("owner"):
+            if not user.username in list(settings["owner"].keys()):
+                await Bot.send_message(self,user.id,"you are not the owner")
+                return
+            parts_m = message.split()
+            if not len(parts_m) == 3:
+                await Bot.send_message(self,user.id,"owner commands is:\n-/owner addAdmin [username]\n-/owner removeAdmin [username]")
+                return
+            try:
+                
+                if(parts_m[1]=="addAdmin"):
+                    foundUser = await users.getIdOldUser(parts_m[2])
+                    if not foundUser:
+                        await Bot.send_message(self,user.id,"\nuser not found!\nNote:The user must be used command /help before")
+                        return
+                    await owner_admin.addAdmin(parts_m[2],foundUser)
+                    await Bot.send_message(self,user.id,f"\n{parts_m[2]} has added to admins list")
+                    return
+                elif(parts_m[1]=="removeAdmin"):
+                    if not parts_m[2] in list(settings["admins"].keys()):
+                        await Bot.send_message(self,user.id,f"\n{parts_m[2]} not in admins list")
+                        return
+                    await owner_admin.removeAdmin(parts_m[2])
+                    await Bot.send_message(self,user.id,f"\n{parts_m[2]} has removed from admins list")
+                    return
+                await Bot.send_message(self,user.id,"no command found [/owner]!")
+            except:await Bot.send_message(self,user.id,"no command found [/owner]")
+            return
+            
+        #! ------
         # /p problme command
         if message.startswith(("p","probleme")):
             m = "\nIf you have a probleme send to one of admins message and let him know.\n\nAdmins:\n"
