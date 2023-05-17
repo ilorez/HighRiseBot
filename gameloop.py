@@ -104,7 +104,7 @@ async def stock(today):
         json.dump(allPD, f)
     with open("data/winners.json","w") as f:
         json.dump(allW, f)
-
+# set data in players.json and tipPayers.json if default state
 async def setDataZero():
     with open("players.json","w") as f:
         json.dump({},f)
@@ -112,16 +112,20 @@ async def setDataZero():
     with open("tipPlayers.json","w") as f:
         json.dump({"tips": []},f)
 
-async def updateSettings():
+async def getNextSettings():
     with open("data/nextSettings.json","r") as f:
-        newSettings = json.load(f)
+        data = json.load(f)
+    return data
+
+# update seetings by copie settings from nextSeeting.json to settings.json
+async def updateSettings():
+    newSettings = await getNextSettings()
     with open("settings.json","w") as f:
         json.dump(newSettings,f)
 
 # this function setLastweek in nxetSetting.json
 async def setLastWeek(date):
-    with open("data/nextSettings.json","r") as f:
-        data = json.load(f)
+    data = getNextSettings()
     data["lastWeek"] = date
     with open("data/nextSettings.json","w") as f:
         json.dump(data,f)
@@ -139,7 +143,7 @@ async def getWinnersTap(date):
 # return days:hours:min:seconds that to week end
 async def toWeekEnd():
     today = datetime.now(timezone.utc)
-    if True:
+    if isSunday():
         days = 6
     else:
         days = 6 - today.weekday()
@@ -155,3 +159,4 @@ async def tippsed():
     settings = getSettings()
     allGolds = len(playersData()) * settings["joinGold"]
     return allGolds
+
