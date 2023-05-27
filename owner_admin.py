@@ -32,5 +32,16 @@ async def removeAdmin(username):
 
 
 
+# return true if id of user in admin list in settings.json
+async def isAdmin(user):
+    sett = getSettings()
+    try:return sett['admins'][user.username] == user.id
+    except:return False
+
+# return true if id of user is id owner in settings.json
+async def isOwner(user):
+    sett = getSettings()
+    try:return sett['owner'][user.username] == user.id
+    except:return False
 
 

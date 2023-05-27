@@ -243,7 +243,7 @@ class Bot(BaseBot):
         #! -----
         #! owner
         if message.startswith("owner"):
-            if not user.username in list(settings["owner"].keys()):
+            if not await owner_admin.isOwner(user):
                 await Bot.send_message(self,user.id,"you are not the owner")
                 return
             parts_m = message.split()
@@ -358,13 +358,21 @@ class Bot(BaseBot):
             try:
                 if len(parts_m) >= 2:
                     if parts_m[1] == "all":
-                        roomUsers = (await self.highrise.get_room_users()).content
-                        for roomUser, _ in roomUsers:
-                            await self.highrise.send_emote(dance, roomUser.id)
+                        #only players ,admins and onwer can make all users dance
+                        if isPlayer(user.id) or await owner_admin.isAdmin(user) or await owner_admin.isOwner(user):
+                            roomUsers = (await self.highrise.get_room_users()).content
+                            for roomUser, _ in roomUsers:
+                                await self.highrise.send_emote(dance, roomUser.id)
+                            return
+                        else:
+                            await Bot.send_message(self,user.id,"\nYou can't make users dance because your not one of players or admins")
+                            return
+                    if parts_m[1] in dances:
+                        await self.highrise.send_emote(parts_m[1], user.id)
                         return
                 await self.highrise.send_emote(dance, user.id)
                 return
-            except:print("user not in room")
+            except:print("error in user dance maybe because user not in room")
         
         # joke command
         if message.startswith("joke"):
