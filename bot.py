@@ -13,6 +13,7 @@ import gameloop
 import users
 import pendingM
 import owner_admin
+import joke
 
 class Bot(BaseBot):
     # start serever
@@ -50,7 +51,7 @@ class Bot(BaseBot):
         for i in range(len(winners_id)):
             if not await users.inRoom(winners_id[i]):
                 continue
-            win_m = [f"Hey {winners_name[i]}!\n\nCongratulations on winning {winners_place[i]} place in last week's game! You've won {winners_gold[i]} golds, and the owner will be tipping you today.\n",f"\nIf you haven't received your golds after 5:00PM, please send a message to {list(settings['owner'])[0]} and let them know.\n\nKeep up the great work, and we hope to see you in the next game!\n\nBest regards."]
+            win_m = [f"\nHey {winners_name[i]}!\n\nCongratulations on winning {winners_place[i]} place in last week's game! You've won {winners_gold[i]} golds, and the owner will be tipping you today.\n",f"\nIf you haven't received your golds after 5:00PM, please send a message to {list(settings['owner'])[0]} and let them know.\n\nKeep up the great work, and we hope to see you in the next game!\n\nBest regards."]
             for mp in win_m:
                 await self.highrise.send_whisper(winners_id[i],mp)
                 await asyncio.sleep(1)
@@ -58,7 +59,7 @@ class Bot(BaseBot):
         #send message to owenrs to tip to winners
         owner_id = settings['owner'][list(settings['owner'])[0]]
         if await users.inRoom(owner_id):
-            owener_me = "\nHi owner tip to winners use [/winners] to see usernames of winners"
+            owener_me = "\nHi owner tip to winners use [/winners] to see winners usernames"
             # await self.highrise.send_whisper(owner_id,owener_me)
             await Bot.send_message(self,owner_id,owener_me)
             await pendingM.removePen(owner_id)
@@ -92,7 +93,7 @@ class Bot(BaseBot):
         if await users.isOldUser(user.id):
             await Bot.send_message(self,user.id,f"\nWelcome {user.username}")
         else:
-             await Bot.send_message(self,user.id, f"\nWelcome {user.username},\nWelcome to Gala World, are you ready to take the advanture!\nfor more info try \'/help\'")
+             await Bot.send_message(self,user.id, f"\nWelcome {user.username},\nWelcome to Gala World, are you ready to take the advanture!\nfor more info try '/help'")
         # game loop test when a member join
         # for understand what is game loop see README file
         # await Bot.game_end(self)
@@ -144,7 +145,7 @@ class Bot(BaseBot):
         settings = game.getSettings() 
         # help or h command
         #! info methods
-        if message.startswith(('h','help')):
+        if message.startswith('help'):
             resp = [f"\nInfo:\n 1. The game restart every sunday at 7:00 UTC \n 2. you need to collect wood and fishe and sell them for coins.\n 3. The player sorts in the leaderboard depense on coins.\n4. Tip {settings['joinGold']}G to join game\n5. [/reward] for reward info.","\nCommands:\n [/start]: for join game after tip\n [/inventory]: show inventory\n [/buy]: for buy new tools\n [/chop]: to collect woods\n [/fish]: to collect fishes\n [/sell]: to sell wood and fish for coins\n [/lb]: for show leaderboard"]
             for ligne in resp:
                 await Bot.send_message(self,user.id,ligne)
@@ -174,7 +175,7 @@ class Bot(BaseBot):
             await Bot.send_message(self,user.id,m)
             return
         # leaderboard command
-        if message.startswith("lb"):
+        if message.startswith(("lb","leaderboard")):
             re_tap = await leaderBorad(user.id)
             re_m = ""
             if len(re_tap) == 3:
@@ -242,7 +243,7 @@ class Bot(BaseBot):
         #! -----
         #! owner
         if message.startswith("owner"):
-            if not user.username in list(settings["owner"].keys()):
+            if not await owner_admin.isOwner(user):
                 await Bot.send_message(self,user.id,"you are not the owner")
                 return
             parts_m = message.split()
@@ -266,13 +267,13 @@ class Bot(BaseBot):
                     await owner_admin.removeAdmin(parts_m[2])
                     await Bot.send_message(self,user.id,f"\n{parts_m[2]} has removed from admins list")
                     return
-                await Bot.send_message(self,user.id,"no command found [/owner]!")
-            except:await Bot.send_message(self,user.id,"no command found [/owner]")
+            except:pass
+            await Bot.send_message(self,user.id,"no command found [/owner]")
             return
             
         #! ------
         # /p problme command
-        if message.startswith(("p","probleme")):
+        if message.startswith("probleme"):
             m = "\nIf you have a probleme send to one of admins message and let him know.\n\nAdmins:\n"
             for admin in settings['admins']:
                 m+= f"-{admin}"
@@ -349,6 +350,21 @@ class Bot(BaseBot):
             return
         #! ---------------
         #! other commands that for fun in room
+        # emote command
+        if message.startswith("emote"):
+            emotes = [] #TODO add emotes to this table
+            parts_m = message.split()
+            try:
+                if len(parts_m) >= 2:
+                    if parts_m[1] in emotes:
+                        await self.highrise.send_emote(parts_m[1], user.id)
+                        return
+                    await Bot.send_message(self,user.id,"\nEmote not found")
+                    return
+                await Bot.send_message(self,user.id,"\ntry: /emote [emote name]")
+                return
+            except:print("error in emotes")
+        # dance command
         if message.startswith("dance"):
             dances = ['dance-macarena', 'dance-tiktok8', 'dance-blackpink', 'dance-tiktok2', 'dance-pennywise', 'dance-russian', 'dance-shoppingcart', 'dance-tiktok9', 'dance-weird', 'dance-tiktok10', 'idle-dance-casual']
             dance = random.choice(dances)
@@ -356,13 +372,33 @@ class Bot(BaseBot):
             try:
                 if len(parts_m) >= 2:
                     if parts_m[1] == "all":
-                        roomUsers = (await self.highrise.get_room_users()).content
-                        for roomUser, _ in roomUsers:
-                            await self.highrise.send_emote(dance, roomUser.id)
+                        #only players ,admins and onwer can make all users dance
+                        if isPlayer(user.id) or await owner_admin.isAdmin(user) or await owner_admin.isOwner(user):
+                            roomUsers = (await self.highrise.get_room_users()).content
+                            for roomUser, _ in roomUsers:
+                                await self.highrise.send_emote(dance, roomUser.id)
+                            return
+                        else:
+                            await Bot.send_message(self,user.id,"\nYou can't make users dance because your not one of players or admins")
+                            return
+                    if parts_m[1] in dances:
+                        await self.highrise.send_emote(parts_m[1], user.id)
                         return
                 await self.highrise.send_emote(dance, user.id)
                 return
-            except:print("user not in room")
+            except:print("error in user dance maybe because user not in room")
+            return
+        
+        # joke command
+        if message.startswith("joke"):
+            try:
+                ran_joke = await joke.get_random_short_joke()
+                await Bot.send_message(self,user.id,f"\n{ran_joke}")
+            except:
+                await Bot.send_message(self,user.id,"\nI don't fell good to tells jokes :(...")
+                print("there is a error in api of joke")
+            return
+        
         #! ---------------
         
         
