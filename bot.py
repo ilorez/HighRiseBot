@@ -51,7 +51,7 @@ class Bot(BaseBot):
         for i in range(len(winners_id)):
             if not await users.inRoom(winners_id[i]):
                 continue
-            win_m = [f"Hey {winners_name[i]}!\n\nCongratulations on winning {winners_place[i]} place in last week's game! You've won {winners_gold[i]} golds, and the owner will be tipping you today.\n",f"\nIf you haven't received your golds after 5:00PM, please send a message to {list(settings['owner'])[0]} and let them know.\n\nKeep up the great work, and we hope to see you in the next game!\n\nBest regards."]
+            win_m = [f"\nHey {winners_name[i]}!\n\nCongratulations on winning {winners_place[i]} place in last week's game! You've won {winners_gold[i]} golds, and the owner will be tipping you today.\n",f"\nIf you haven't received your golds after 5:00PM, please send a message to {list(settings['owner'])[0]} and let them know.\n\nKeep up the great work, and we hope to see you in the next game!\n\nBest regards."]
             for mp in win_m:
                 await self.highrise.send_whisper(winners_id[i],mp)
                 await asyncio.sleep(1)
@@ -59,7 +59,7 @@ class Bot(BaseBot):
         #send message to owenrs to tip to winners
         owner_id = settings['owner'][list(settings['owner'])[0]]
         if await users.inRoom(owner_id):
-            owener_me = "\nHi owner tip to winners use [/winners] to see usernames of winners"
+            owener_me = "\nHi owner tip to winners use [/winners] to see winners usernames"
             # await self.highrise.send_whisper(owner_id,owener_me)
             await Bot.send_message(self,owner_id,owener_me)
             await pendingM.removePen(owner_id)
@@ -93,7 +93,7 @@ class Bot(BaseBot):
         if await users.isOldUser(user.id):
             await Bot.send_message(self,user.id,f"\nWelcome {user.username}")
         else:
-             await Bot.send_message(self,user.id, f"\nWelcome {user.username},\nWelcome to Gala World, are you ready to take the advanture!\nfor more info try \'/help\'")
+             await Bot.send_message(self,user.id, f"\nWelcome {user.username},\nWelcome to Gala World, are you ready to take the advanture!\nfor more info try '/help'")
         # game loop test when a member join
         # for understand what is game loop see README file
         # await Bot.game_end(self)
@@ -267,8 +267,8 @@ class Bot(BaseBot):
                     await owner_admin.removeAdmin(parts_m[2])
                     await Bot.send_message(self,user.id,f"\n{parts_m[2]} has removed from admins list")
                     return
-                await Bot.send_message(self,user.id,"no command found [/owner]!")
-            except:await Bot.send_message(self,user.id,"no command found [/owner]")
+            except:pass
+            await Bot.send_message(self,user.id,"no command found [/owner]")
             return
             
         #! ------
@@ -394,7 +394,9 @@ class Bot(BaseBot):
             try:
                 ran_joke = await joke.get_random_short_joke()
                 await Bot.send_message(self,user.id,f"\n{ran_joke}")
-            except:print("there is a error in api of joke")
+            except:
+                await Bot.send_message(self,user.id,"\nI don't fell good to tells jokes :(...")
+                print("there is a error in api of joke")
             return
         
         #! ---------------
