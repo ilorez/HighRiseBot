@@ -350,7 +350,21 @@ class Bot(BaseBot):
             return
         #! ---------------
         #! other commands that for fun in room
-        #dance command
+        # emote command
+        if message.startswith("emote"):
+            emotes = [] #TODO add emotes to this table
+            parts_m = message.split()
+            try:
+                if len(parts_m) >= 2:
+                    if parts_m[1] in emotes:
+                        await self.highrise.send_emote(parts_m[1], user.id)
+                        return
+                    await Bot.send_message(self,user.id,"\nEmote not found")
+                    return
+                await Bot.send_message(self,user.id,"\ntry: /emote [emote name]")
+                return
+            except:print("error in emotes")
+        # dance command
         if message.startswith("dance"):
             dances = ['dance-macarena', 'dance-tiktok8', 'dance-blackpink', 'dance-tiktok2', 'dance-pennywise', 'dance-russian', 'dance-shoppingcart', 'dance-tiktok9', 'dance-weird', 'dance-tiktok10', 'idle-dance-casual']
             dance = random.choice(dances)
@@ -373,6 +387,7 @@ class Bot(BaseBot):
                 await self.highrise.send_emote(dance, user.id)
                 return
             except:print("error in user dance maybe because user not in room")
+            return
         
         # joke command
         if message.startswith("joke"):
