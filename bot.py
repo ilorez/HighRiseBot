@@ -13,6 +13,7 @@ import gameloop
 import users
 import pendingM
 import owner_admin
+import joke
 
 class Bot(BaseBot):
     # start serever
@@ -144,7 +145,7 @@ class Bot(BaseBot):
         settings = game.getSettings() 
         # help or h command
         #! info methods
-        if message.startswith(('h','help')):
+        if message.startswith('help'):
             resp = [f"\nInfo:\n 1. The game restart every sunday at 7:00 UTC \n 2. you need to collect wood and fishe and sell them for coins.\n 3. The player sorts in the leaderboard depense on coins.\n4. Tip {settings['joinGold']}G to join game\n5. [/reward] for reward info.","\nCommands:\n [/start]: for join game after tip\n [/inventory]: show inventory\n [/buy]: for buy new tools\n [/chop]: to collect woods\n [/fish]: to collect fishes\n [/sell]: to sell wood and fish for coins\n [/lb]: for show leaderboard"]
             for ligne in resp:
                 await Bot.send_message(self,user.id,ligne)
@@ -174,7 +175,7 @@ class Bot(BaseBot):
             await Bot.send_message(self,user.id,m)
             return
         # leaderboard command
-        if message.startswith("lb"):
+        if message.startswith(("lb","leaderboard")):
             re_tap = await leaderBorad(user.id)
             re_m = ""
             if len(re_tap) == 3:
@@ -272,7 +273,7 @@ class Bot(BaseBot):
             
         #! ------
         # /p problme command
-        if message.startswith(("p","probleme")):
+        if message.startswith("probleme"):
             m = "\nIf you have a probleme send to one of admins message and let him know.\n\nAdmins:\n"
             for admin in settings['admins']:
                 m+= f"-{admin}"
@@ -349,6 +350,7 @@ class Bot(BaseBot):
             return
         #! ---------------
         #! other commands that for fun in room
+        #dance command
         if message.startswith("dance"):
             dances = ['dance-macarena', 'dance-tiktok8', 'dance-blackpink', 'dance-tiktok2', 'dance-pennywise', 'dance-russian', 'dance-shoppingcart', 'dance-tiktok9', 'dance-weird', 'dance-tiktok10', 'idle-dance-casual']
             dance = random.choice(dances)
@@ -363,6 +365,15 @@ class Bot(BaseBot):
                 await self.highrise.send_emote(dance, user.id)
                 return
             except:print("user not in room")
+        
+        # joke command
+        if message.startswith("joke"):
+            try:
+                ran_joke = await joke.get_random_short_joke()
+                await Bot.send_message(self,user.id,f"\n{ran_joke}")
+            except:print("there is a error in api of joke")
+            return
+        
         #! ---------------
         
         
