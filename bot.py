@@ -304,7 +304,7 @@ class Bot(BaseBot):
             if type(re) == int:
                 re = f"You got {re} Woods\nYou can chop wood again after {settings['chopToolSleep']+1} min"
             
-            await Bot.send_message(self,user.id,re)
+            await Bot.send_message(self,user.id,f"To chop wood again run /chop after {re}min")
             return
         ## fishing command
         if message.startswith("fish"):
@@ -312,7 +312,7 @@ class Bot(BaseBot):
             if type(re) == int:
                 re = f"You got {re} fishs\nYou can fishing again after {settings['fishToolSleep']+1} min"
             
-            await Bot.send_message(self,user.id,re)
+            await Bot.send_message(self,user.id,f"To fishing again run /fish after {re}min")
             return
 
         if message.startswith("inventory"):
@@ -340,19 +340,21 @@ class Bot(BaseBot):
                     num = int(parts_m[1])
                     if num <=8 and num >=1:
                         await Bot.send_message(self,user.id,await game.buyItem(user.id,num))
-                    else:await Bot.send_message(self,user.id,'item not found! \nyou need to select number for item from list ,try:[/buy]')
-                except:await Bot.send_message(self,user.id,'item not found! try:[/buy]')
+                        return
+                    
+                except:pass
+                await Bot.send_message(self,user.id,'item not found! \nyou need to select number for item from list ,try:[/buy]')
                 
             return
         if message.startswith("sell"):
             # await game.sellItems(user.id)
-            await Bot.send_message(self,user.id,f"You get {await game.sellItems(user.id)}Gala")
+            await Bot.send_message(self,user.id,f"You got {await game.sellItems(user.id)} Gala")
             return
         #! ---------------
         #! other commands that for fun in room
         # emote command
         if message.startswith("emote"):
-            emotes = [] #TODO add emotes to this table
+            emotes = ["emote-kiss","emote-no","emote-sad","emote-yes","emote-laughing","emote-hello","emote-wave","emote-shy","emote-tired","emoji-angry","idle-loop-sitfloor","emoji-thumbsup","emote-lust","emoji-cursing","emote-greedy","emoji-flex","emoji-gagging","emoji-celebrate","dance-macarena","dance-tiktok8","dance-blackpink","emote-model","dance-tiktok2","dance-pennywise","emote-bow","dance-russian","emote-curtsy","emote-snowball","emote-hot","emote-snowangel","emote-charging","dance-shoppingcart","emote-confused","idle-enthusiastic","emote-telekinesis","emote-float","emote-teleporting","emote-swordfight","emote-maniac","emote-energyball","emote-snake","idle_singing","emote-frog","emote-superpose","emote-cute","dance-tiktok9","dance-weird","dance-tiktok10","emote-pose7","emote-pose8","idle-dance-casual","emote-pose1","emote-pose3","emote-pose5","emote-cutey"]
             parts_m = message.split()
             try:
                 if len(parts_m) >= 2:

@@ -1,0 +1,177 @@
+{
+    
+    "game_end":{
+        "01":{
+            "ENG":["\nHey ","!\n\nLast week's game has ended and we have the winners:\n\n"," won "," Golds!\n","\nThis week's game has just started and you can join us by tipping "," Golds. Hurry up to secure your spot among the top three!\n\nTip fast to get your chance at the top.\n\nBest of luck and have fun!"]
+        },
+        "02":{
+            "ENG":["\nHey ","!\n\nCongratulations on winning "," place in last week's game! You've won "," golds, and the owner will be tipping you today.\n","\nIf you haven't received your golds after 5:00PM, please send a message to "," and let them know.\n\nKeep up the great work, and we hope to see you in the next game!\n\nBest regards."]
+        },
+        "03":{
+            "ENG":["\nHi owner tip to winners use [/winners] to see winners usernames"]
+        }
+    },
+    "join_room":{
+        "01":{
+            "ENG":["\nWelcome ",",\nWelcome to Gala World, are you ready to take the advanture!\nfor more info try '/help'"]
+        }
+    },
+    "help":{
+        "01":{
+            "ENG":["\nInfo:\n 1. The game restart every sunday at 7:00 UTC \n 2. you need to collect wood and fishe and sell them for coins.\n 3. The player sorts in the leaderboard depense on coins.\n4. Tip ","G to join game\n5. [/reward] for reward info.","\nCommands:\n [/start]: for join game after tip\n [/inventory]: show inventory\n [/buy]: for buy new tools\n [/chop]: to collect woods\n [/fish]: to collect fishes\n [/sell]: to sell wood and fish for coins\n [/lb]: for show leaderboard"]
+        }
+    },
+    "admins":{
+        "01":{
+            "ENG":["\nAdmins:\n"],
+            "DARIJA":["\nمسؤولين:\n"]
+        },
+        "02":{
+            "ENG":[" [In Room]"],
+            "DARIJA":[" [حاضر]"]
+
+        }
+    },
+    "winners":{
+        "01":{
+            "ENG":["\nWinners:\n"]
+        },
+        "02":{
+            "ENG":["In Room"]
+        }
+    },
+    "leaderboard":{
+        "01":{
+            "ENG":["\n[+]Your Position: "]
+        },
+        "02":{
+            "ENG":["\n[+]Players: "]
+        },
+        "03":{
+            "ENG":["\n[+]Best Players:"]
+        }
+    },
+    "end":{
+        "01":{
+            "ENG":["\ndate to game end is:\n"]
+        }
+    },
+    "prize":{
+        "01":{
+            "ENG":["\nAll Golds in Tip:\n"]
+        }
+    },
+    "start":{
+        "01":{
+            "ENG":["\nyou are already start!"]
+        },
+        "02":{
+            "ENG":["\nWelcome, You can start playing now:)"]
+        },
+        "03":{
+            "ENG":["\nYou need to tip ","G first.\nif you have a probleme try Use: [/probleme]"]
+        }
+    },
+    "admin":{
+        "01":{
+            "ENG":["You are not an admin"]
+        },
+        "02":{
+            "ENG":["admin commands is:\n-/admin add [username]\n-/admin remove [username]"]
+        },
+        "3":{
+            "ENG":["has added to tip list\nfor remove a player try /admin remove username"]
+        },
+        "04":{
+            "ENG":["the "," hase removed"]
+        },
+        "05":{
+            "ENG":["there no player with username:"]
+        },
+        "06":{
+            "ENG":["no command found"]
+        }
+    },
+    "owner":{
+        "01":{
+            "ENG":["you are not the owner"]
+        },
+        "02":{
+            "ENG":["owner commands is:\n-/owner addAdmin [username]\n-/owner removeAdmin [username]"]
+        },
+        "3":{
+            "ENG":["\nuser not found!\nNote:The user must be used command /help before"]
+        },
+        "4":{
+            "ENG":[" has added to admins list"]
+        },
+        "5":{
+            "ENG":[" not in admins list"]
+        },
+        "6":{
+            "ENG":[" has removed from admins list"]
+        },
+        "7":{
+            "ENG":["\nno command found [/owner]"]
+        }
+    },
+    "probleme":{
+        "1":{
+            "ENG":["\nIf you have a probleme send to one of admins message and let him know.\n\nAdmins:\n"]
+        },
+        "2":{
+            "ENG":[" [In Room]"]
+        },
+        "3":{
+            "ENG":["Hi ","! You didn't join game yet.\nTry /start"]
+        }
+    },
+    "chop":{
+        "1":{
+            "ENG":["You got "," Woods\nYou can chop wood again after "," min"]
+        },
+        "2":{
+            "ENG":["To chop wood again run /chop after ","min"]
+        }
+    },
+    "fish":{
+        "1":{
+            "ENG":["You got "," fishs\nYou can fishing again after "," min"]
+        },
+        "2":{
+            "ENG":["To fishing again run /fish after ","min"]
+        }
+    },
+    "inventory":{
+        "1":{
+            "ENG":["\nInventory\n[+]Coins = "," Gala\n","[+]Tools:\n  -"," Axe\n  -"," fishing rod\n","[+]Resources:\n  -Woods: ","\n  -Fishs: ","\n","Note: use [/sell] to sell resourses"]
+        }
+    },
+    "buy":{
+        "1":{
+            "ENG":["Axe:\n\t1.Wood -","Gala\n\t2.Iron -","Gala\n\t3.Gold -","Gala\n\t4.Diamond -","Gala","Fishing rod:\n\t5.Wood -","Gala\n\t6.Iron -","Gala\n\t7.Gold -","Gala\n\t8.Diamond -","Gala","\n[+]Use /buy [number of item 1-8]"]
+        },
+        "2":{
+            "EMG":["item not found! \nyou need to select number for item from list ,try:[/buy]"]
+        }
+    },
+    "sell":{
+        "1":{
+            "ENG":["You got "," Gala"]
+        }
+    },
+    "dance":{
+        "01":{
+            "ENG":["\nYou can't make users dance because your not one of players or admins"],
+            "DARIJA":["\nخصك تكون مشترك قي لعبة ديال روم ولا مسؤول باش تشطح كلشي"]
+        }
+    },
+    "joke":{
+        "01":{
+            "ENG":["\nI don't fell good to tells jokes :(..."],
+            "DARIJA":["\nمفيا منعاود ليك شي نكتة قلب عليا"]
+        }
+    }
+
+
+}

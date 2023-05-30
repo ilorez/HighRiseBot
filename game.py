@@ -88,7 +88,7 @@ async def chop(id):
     wait_m = settings["chopToolSleep"] - minutes
     wait_s = 60 - seconds
     time_str = "{:02d}:{:02d}".format(wait_m, wait_s)
-    return f"To chop wood again run /chop after {time_str}min"
+    return time_str
     
     
 
@@ -116,7 +116,7 @@ async def fish(id):
     wait_m = settings["fishToolSleep"] - minutes
     wait_s = 60 - seconds
     time_str = "{:02d}:{:02d}".format(wait_m, wait_s)
-    return f"To fishing again run /fish after {time_str}min"
+    return time_str
 
 
 
