@@ -1,19 +1,19 @@
 {
-  "joinGold": 50,
+  "joinGold": 10,
   "wood": 10,
   "fish": 1,
   "chopToolSleep": 4,
   "fishToolSleep": 4,
   "toolsPrix": {
     "axe": { "wood": 5, "iron": 100, "gold": 500, "diamond": 1000 },
-    "rod": { "wood": 5, "iron": 110, "gold": 550, "diamond": 1050 }
+    "rod": { "wood": 5, "iron": 125, "gold": 600, "diamond": 1200 }
   },
   "toolRange": {
     "axe": {
-      "wood": [1, 10],
-      "iron": [5, 20],
-      "gold": [20, 50],
-      "diamond": [50, 100]
+      "wood": [1, 40],
+      "iron": [40, 80],
+      "gold": [80, 110],
+      "diamond": [110, 180]
     },
     "rod": {
       "wood": [1, 5],
@@ -30,5 +30,6 @@
     "Russi_ian": "5fe9e558545dd4e2630f091d"
   },
   "owner": { "JeoParty": "6452e89111045823a622c6e1" },
-  "lastWeek": "2023/05/14"
+  "lastWeek": "2023/05/14",
+  "languages":["ENG","DARIJA"]
 }

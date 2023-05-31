@@ -1,4 +1,5 @@
 import json
+from game import getSettings
 
 # import and convert data/allUsers.json to dict
 async def getAllUsers():
@@ -13,12 +14,17 @@ async def isOldUser(search,index=0):
         if user[index] == search:
             return True
     return False
+# re_write allUsers.json with new value
+async def setAllUsersData(data):
+     with open("data/allUsers.json","w") as f:
+        json.dump(data,f)
 # new user
 async def addUser(user):
     users = await getAllUsers()
-    users['users'].append([user.id,user.username])
-    with open("data/allUsers.json","w") as f:
-        json.dump(users,f)
+    # get first lang in settings as default language for all users
+    defaultLang = getSettings()["languages"][0]
+    users['users'].append([user.id,user.username,defaultLang])
+    await setAllUsersData(users)
 
 #get data from inRoom.json
 async def getInRoom():
@@ -66,7 +72,22 @@ async def getIdOldUser(username):
             return user[0]
     return False
 
+# return user lang from user profile
+async def getUserLang(user_id):
+    users = (await getAllUsers())["users"]
+    for u in users:
+        if u[0] == user_id:
+            return u[2]
+    return False
 
-
+# change language of user
+async def changeUserLang(user_id,lang):
+    users = await getAllUsers()
+    for u in users["users"]:
+        if u[0] == user_id:
+            if u[2] == lang:
+                return
+            u[2] = lang
+    await setAllUsersData(users)
 
 
