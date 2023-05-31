@@ -28,8 +28,27 @@
     },
     "help":{
         "01":{
-            "ENG":["\nInfo:\n 1. The game restart every sunday \n 2. you need to collect wood and fishe and sell them for coins.\n 3. The player sorts in the leaderboard depense on coins.\n4. Tip ","G to join game\n5. [/reward] for reward info.","\nCommands:\n [/start]: for join game after tip\n [/inventory]: show inventory\n [/buy]: for buy new tools\n [/chop]: to collect woods\n [/fish]: to collect fishes\n [/sell]: to sell wood and fish for coins\n [/lb]: for show leaderboard"],
-            "DARIJA":["\nمعلومات:\n 1. مسابقة كتعاود نهار لحد \n 2. خصك تجمع خشب و حوت و تبيعهوم باش تجمع نقاط.\n 3. لاعب كيخد ترتيب مركز تاعو على حساب شحال جمع تنقاط.\n4. تبي ","عملة دهبية باش يتبدا تلعب\n5. كتب[/reward] باش تشوف كفاش او اش كتربح.","\nأوامر:\n [/start]: باش تبدا تلعب\n [/inventory]: موارد\n [/buy]: شراء اداة جديدة\n [/chop]: لجمع الخشي\n [/fish]: لصطياد السمك\n [/sell]: لبيع سمك و خشب\n [/lb]: لرؤية لائحة اللاعبين"]
+            "ENG":["\nInfo:\n 1. The game restart every sunday \n 2. you need to collect wood and fishe and sell them for coins.\n 3. The player sorts in the leaderboard depense on coins.\n4. Tip ","G to join game\n5. [/reward] for reward info.","\nCommands:\n [/lang]: change language\n [/start]: for join game after tip\n [/inventory]: show inventory\n [/buy]: for buy new tools\n [/chop]: to collect woods\n [/fish]: to collect fishes\n [/sell]: to sell wood and fish for coins\n [/lb]: for show leaderboard"],
+            "DARIJA":["\nمعلومات:\n 1. مسابقة كتعاود نهار لحد \n 2. خصك تجمع خشب و حوت و تبيعهوم باش تجمع نقاط.\n 3. لاعب كيخد ترتيب مركز تاعو على حساب شحال جمع تنقاط.\n4. تبي "," عملة دهبية باش تبدا تلعب\n5. كتب[/reward] باش تشوف كفاش او اش كتربح.","\nأوامر:\n [/lang]: تغير اللغة\n [/start]: باش تبدا تلعب\n [/inventory]: موارد\n [/buy]: شراء اداة جديدة\n [/chop]: لجمع الخشي\n [/fish]: لصطياد السمك\n [/sell]: لبيع سمك و خشب\n [/lb]: لرؤية لائحة اللاعبين"]
+        }
+    },
+    "lang":{
+        "01":{
+            "ENG":["\nlanguage has changed to "],
+            "DARIJA":["\nلغة راه تغيرات ل:\n "]
+        },
+        "02":{
+            "ENG":[" language not found try: /lang"],
+            "DARIJA":["\n مكيناش ف لغات جرب:\n /lang"]
+
+        },
+        "03":{
+            "ENG":["\nlanguages list:"],
+            "DARIJA":["\nاللغات"]
+        },
+        "04":{
+            "ENG":["\nuse: /lang [language name]"],
+            "DARIJA":["\nجرب: \n/lang [سميت لغة]"]
 
         }
     },
@@ -180,7 +199,7 @@
     "chop":{
         "01":{
             "ENG":["\nYou got "," Woods\nYou can chop wood again after "," min"],
-            "DARIJA":["\n جمعتي "," خشبات\nيمكن ليك تقطع لخشب من بعد\n "," دقيقة"]
+            "DARIJA":["\n جمعتي "," خشبة\nيمكن ليك تقطع لخشب من بعد\n "," دقيقة"]
         },
         "02":{
             "ENG":["\nTo chop wood again run /chop after ","min"],
@@ -190,7 +209,7 @@
     "fish":{
         "01":{
             "ENG":["\nYou got "," fishs\nYou can fishing again after "," min"],
-            "DARIJA":["\n صيدتي "," حوتات\nيمكن ليك تصيد عوتاني من بعد\n "," دقيقة"]
+            "DARIJA":["\n صيدتي "," حوتة\nيمكن ليك تصيد عوتاني من بعد\n "," دقيقة"]
         },
         "02":{
             "ENG":["\nTo fishing again run /fish after ","min"],

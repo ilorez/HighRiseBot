@@ -149,6 +149,9 @@ class Bot(BaseBot):
         # when command not start with "/" the bot will not read it
         if not message[0] == '/':
             return
+        # add users to allUsers.json if it not in it 
+        if not (await users.isOldUser(user.id)):
+            await users.addUser(user)
         message = message[1:]
         settings = game.getSettings() 
         # help or h command
@@ -159,11 +162,34 @@ class Bot(BaseBot):
             for ligne in resp:
                 await Bot.send_message(self,user.id,ligne)
                 await asyncio.sleep(0.01)
-            # add users to allUsers.json if it not in it 
-            if not (await users.isOldUser(user.id)):
-                await users.addUser(user)
             return
         
+        # /lang  command: for show or change language
+        #TODO add lang to botMessages
+        if message.startswith("lang"):
+            langs_list = settings["languages"]
+            parts_m = message.split()
+            try:
+                if len(parts_m) > 1:
+                    new_lang = parts_m[1]
+                    if new_lang in langs_list:
+                        await users.changeUserLang(user.id,new_lang)
+                        botMes = (await messages_conrole.getMessage(user,"lang","01"))[0]
+                        m = f"{botMes}{new_lang}"
+                    else:
+                        botMes = (await messages_conrole.getMessage(user,"lang","02"))[0]
+                        m = f"\n{new_lang}{botMes}"
+                    
+                else:
+                    botMes = (await messages_conrole.getMessage(user,"lang","03"))[0]
+                    m = botMes
+                    for l in langs_list:
+                        m+= f"\n  -{l}"
+                    botMes = (await messages_conrole.getMessage(user,"lang","04"))[0]
+                    m += botMes
+                await Bot.send_message(self,user.id,m)
+            except:print("there is a error in change lang")
+            return
         # start command add player from tip list to game
         if message.startswith("admins"):
             m = (await messages_conrole.getMessage(user,"admins","01"))[0]
