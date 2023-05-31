@@ -7,5 +7,5 @@ async def getUserLang():
     pass
 
 async def getMessage(user,name,num):
-    lang = "DARIJA"
+    lang = "ENG"
     return messagesData[name][num][lang]

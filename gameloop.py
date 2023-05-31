@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 from game import getSettings
 from player import playersData, getPlayers
+from messages_conrole import getMessage
 
 import asyncio
 import json
@@ -131,10 +132,9 @@ async def setLastWeek(date):
         json.dump(data,f)
 
 # this functio return winners of last week [[id,name,postion,gold],[id,name,postion,gold],[id,name,postion,gold]]
-async def getWinnersTap(date):
+async def getWinnersTap(date,pos):
     wins = allWinners()[date]
     tabN = ["firstP","secondP","thirdP"]
-    pos = ["1st","2nd","3rd"]
     Tab = []
     for i in range (len(tabN)):
         Tab.append([wins[tabN[i]]["id"],wins[tabN[i]]["name"],pos[i],wins[tabN[i]]["winGolds"]])
@@ -147,7 +147,7 @@ async def toWeekEnd():
         days = 6
     else:
         days = 6 - today.weekday()
-    hours = 22 - today.hour
+    hours = 23 - today.hour
     minutes = 59 - today.minute
     seconds = 59 - today.second
     time_str = f"{days} days {hours:02d}:{minutes:02d}:{seconds:02d}"

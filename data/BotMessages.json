@@ -12,14 +12,18 @@
         },
         "03":{
             "ENG":["\nHi owner tip to winners use [/winners] to see winners usernames"],
-            "DARIJA":["\nأفين المسؤول مسابقة تهاد صمانة سلات خاصك تصفت هملات دهبية لمليهوم\nuse [/winners] to see winners usernames"]
+            "DARIJA":["\nأفين المسؤول مسابقة تهاد صمانة سلات خاصك تصفت عملات دهبية لمليهوم\nجرب [/winners] باش تشوف سميات ترابحين"]
 
+        },
+        "04":{
+            "ENG":["1st","2nd","3rd"],
+            "DARIJA":["لول","ثاني","ثالث"]
         }
     },
     "join_room":{
         "01":{
             "ENG":["\nWelcome ",",\nWelcome to Gala World, are you ready to take the advanture!\nfor more info try '/help'"],
-            "DARIJA":["\nأمرحبا ",",\nمرحبا بيك في فروم تاعك جرب تكتب '/help'"]
+            "DARIJA":["\nأمرحبا بيك أسي "," فروم تاعك جرب تكتب :\n/help"]
         }
     },
     "help":{
@@ -107,9 +111,9 @@
             "ENG":["admin commands is:\n-/admin add [username]\n-/admin remove [username]"],
             "DARIJA":["أوامر:\n-/admin add [username]\n-/admin remove [username]"]
         },
-        "3":{
-            "ENG":["has added to tip list\nfor remove a player try /admin remove username"],
-            "DARIJA":["تزاد ف لائحة اللاعبين\nلحدف اللاعب جرب\n/admin remove username"]
+        "03":{
+            "ENG":[" has added to tip list\nfor remove a player try /admin remove username"],
+            "DARIJA":[" تزاد ف لائحة اللاعبين\nلحدف اللاعب جرب\n/admin remove username "]
         },
         "04":{
             "ENG":["the "," hase removed"],
@@ -135,88 +139,102 @@
             "DARIJA":["الأوامر:\n-/owner addAdmin [username]\n-/owner removeAdmin [username]"]
 
         },
-        "3":{
+        "03":{
             "ENG":["\nuser not found!\nNote:The user must be used command /help before"],
             "DARIJA":["\nلم يتم عثور على المستخدم!\nملاحضة:\nمن الضروري ان يكون مستخدم استعمل الأمر /help من قبل"]
             
         },
-        "4":{
+        "04":{
             "ENG":[" has added to admins list"],
             "DARIJA":[" أضيف للمسؤولين"]
         },
-        "5":{
+        "05":{
             "ENG":[" not in admins list"],
             "DARIJA":[" لا يوجد ضمن المسؤولين"]
         },
-        "6":{
+        "06":{
             "ENG":[" has removed from admins list"],
             "DARIJA":[" حدفة من لائحة المسؤولين"]
         },
-        "7":{
+        "07":{
             "ENG":["\nno command found [/owner]"],
             "DARIJA":["\nلم يتم العثور على الأمر استعمل \n[/owner]"]
         }
     },
     "probleme":{
-        "1":{
+        "01":{
             "ENG":["\nIf you have a probleme send to one of admins message and let him know.\n\nAdmins:\n"],
             "DARIJA":["\nالا واجهتي شي مشكل هضر مو واحد من مسؤولين.\n\nالمسؤولين:\n"]
         },
-        "2":{
+        "02":{
             "ENG":[" [In Room]"],
             "DARIJA":[" [حاضر]"]
-        },
-        "3":{
-            "ENG":["Hi ","! You didn't join game yet.\nTry /start"],
-            "DARIJA":["أفين ","! راه مزال متسجلتي ف مسابقة جرب: \n/start"]
+        }
+    },
+    "not_player":{
+        "01":{
+            "ENG":["\nHi ","! You didn't join game yet.\nTry /start"],
+            "DARIJA":["\nأفين ","! راه مزال متسجلتي ف مسابقة جرب: \n/start"]
         }
     },
     "chop":{
-        "1":{
-            "ENG":["You got "," Woods\nYou can chop wood again after "," min"],
-            "DARIJA":[" جمعتي "," خشبات\nيمكن ليك تقطع لخشب من بعد\n "," دقيقة"]
+        "01":{
+            "ENG":["\nYou got "," Woods\nYou can chop wood again after "," min"],
+            "DARIJA":["\n جمعتي "," خشبات\nيمكن ليك تقطع لخشب من بعد\n "," دقيقة"]
         },
-        "2":{
-            "ENG":["To chop wood again run /chop after ","min"],
-            "DARIJA":["يمكن ليك تقطع لخشب من بعد\n "," دقيقة"]
+        "02":{
+            "ENG":["\nTo chop wood again run /chop after ","min"],
+            "DARIJA":["\nيمكن ليك تقطع لخشب من بعد\n "," دقيقة"]
         }
     },
     "fish":{
-        "1":{
-            "ENG":["You got "," fishs\nYou can fishing again after "," min"],
-            "DARIJA":[" صيدتي "," حوتات\nيمكن ليك تصيد عوتاني من بعد\n "," دقيقة"]
+        "01":{
+            "ENG":["\nYou got "," fishs\nYou can fishing again after "," min"],
+            "DARIJA":["\n صيدتي "," حوتات\nيمكن ليك تصيد عوتاني من بعد\n "," دقيقة"]
         },
-        "2":{
-            "ENG":["To fishing again run /fish after ","min"],
-            "DARIJA":["يمكن ليك تصيد عوتاني من بعد "," دقيقة"]
+        "02":{
+            "ENG":["\nTo fishing again run /fish after ","min"],
+            "DARIJA":["\nيمكن ليك تصيد عوتاني من بعد "," دقيقة"]
         }
     },
     "inventory":{
-        "1":{
+        "01":{
             "ENG":["\nInventory\n[+]Coins = "," Gala\n","[+]Tools:\n  -"," Axe\n  -"," fishing rod\n","[+]Resources:\n  -Woods: ","\n  -Fishs: ","\n","Note: use [/sell] to sell resourses"],
             "DARIJA":["\nمخزن\n-نقاط = "," Gala\n","-أدوات:\n  -"," Axe\n  -"," fishing rod\n","-موارد:\n  -خشب: ","\n  -سمك: ","\n","ملاحظة: باش تبيع موارد اكتب امر:\n [/sell]"]
         }
     },
     "buy":{
-        "1":{
-            "ENG":["Axe:\n\t1.Wood -","Gala\n\t2.Iron -","Gala\n\t3.Gold -","Gala\n\t4.Diamond -","Gala","Fishing rod:\n\t5.Wood -","Gala\n\t6.Iron -","Gala\n\t7.Gold -","Gala\n\t8.Diamond -","Gala","\n[+]Use /buy [number of item 1-8]"],
-            "DARIJA":["Axe:\n\t1.Wood -","Gala\n\t2.Iron -","Gala\n\t3.Gold -","Gala\n\t4.Diamond -","Gala","Fishing rod:\n\t5.Wood -","Gala\n\t6.Iron -","Gala\n\t7.Gold -","Gala\n\t8.Diamond -","Gala","\n[+]Use /buy [number of item 1-8]"]
+        "01":{
+            "ENG":["\nAxe:\n\t1.Wood -","Gala\n\t2.Iron -","Gala\n\t3.Gold -","Gala\n\t4.Diamond -","Gala","Fishing rod:\n\t5.Wood -","Gala\n\t6.Iron -","Gala\n\t7.Gold -","Gala\n\t8.Diamond -","Gala","\n[+]Use /buy [number of item 1-8]"],
+            "DARIJA":["\nAxe:\n\t1.Wood -","Gala\n\t2.Iron -","Gala\n\t3.Gold -","Gala\n\t4.Diamond -","Gala","Fishing rod:\n\t5.Wood -","Gala\n\t6.Iron -","Gala\n\t7.Gold -","Gala\n\t8.Diamond -","Gala","\n[+]Use /buy [number of item 1-8]"]
         },
-        "2":{
-            "ENG":["item not found! \nyou need to select number for item from list ,try:[/buy]"],
-            "DARIJA":["هاد عنصر مكاينش! \nخصك تختار رقم عنصر ,جرب:\n[/buy]"]
+        "02":{
+            "ENG":["\nitem not found! \nyou need to select number for item from list ,try:[/buy]"],
+            "DARIJA":["\nهاد عنصر مكاينش! \nخصك تختار رقم عنصر ,جرب:\n[/buy]"]
         }
     },
     "sell":{
-        "1":{
-            "ENG":["You got "," Gala"],
-            "DARIJA":["حصلتي على "," Gala"]
+        "01":{
+            "ENG":["\nYou got "," Gala"],
+            "DARIJA":["\nحصلتي على "," Gala"]
         }
     },
     "dance":{
         "01":{
             "ENG":["\nYou can't make users dance because your not one of players or admins"],
             "DARIJA":["\nخصك تكون مشترك قي لعبة ديال روم ولا مسؤول باش تشطح كلشي"]
+        }
+    },
+    "emote":{
+        "01":{
+            "ENG":["\nEmote not found"],
+            "DARIJA":["\nمكاينش هاد تعبير لي بغيتي"]
+
+        },
+        "02":{
+            "ENG":["\ntry: /emote [emote name]"],
+            "DARIJA":["\nجرب:\n /emote [سميتو]"]
+
         }
     },
     "joke":{

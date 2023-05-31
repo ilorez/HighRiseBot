@@ -14,6 +14,7 @@ import users
 import pendingM
 import owner_admin
 import joke
+import messages_conrole
 
 class Bot(BaseBot):
     # start serever
@@ -22,7 +23,7 @@ class Bot(BaseBot):
             await self.highrise.send_whisper(user_id,message)
     
 
-    async def game_end(self):
+    async def game_end(self,user):
         await pendingM.setPendingM()
         today = gameloop.get_utc_date()
         await gameloop.stock(today)
@@ -34,7 +35,8 @@ class Bot(BaseBot):
         winners_id = [winners["firstP"]["id"],winners["secondP"]["id"],winners["thirdP"]["id"]]
         winners_name = [winners["firstP"]["name"],winners["secondP"]["name"],winners["thirdP"]["name"]]
         winners_gold = [winners["firstP"]["winGolds"],winners["secondP"]["winGolds"],winners["thirdP"]["winGolds"]]
-        winners_place = ["1st","2nd","3rd"]
+        winners_place = await messages_conrole.getMessage(user,"game_end","04")
+        
 
         await asyncio.sleep(1)
         # send messageto playes that notice them game end
@@ -42,7 +44,8 @@ class Bot(BaseBot):
             # if user is not in room or if user is one of winner don't do anything
             if (not await users.inRoom(p[0]))or(p[0] in winners_id):
                 continue
-            allP_m = [f"\nHey {p[1]}!\n\nLast week's game has ended and we have the winners:\n\n{winners['firstP']['name']} won {winners['firstP']['winGolds']} Golds!\n{winners['secondP']['name']} won {winners['secondP']['winGolds']} Golds!\n{winners['thirdP']['name']} won {winners['thirdP']['winGolds']} Golds!",f"\nThis week's game has just started and you can join us by tipping {settings['joinGold']} Golds. Hurry up to secure your spot among the top three!\n\nTip fast to get your chance at the top.\n\nBest of luck and have fun!"]
+            botMes = await messages_conrole.getMessage(user,"game_end","01")
+            allP_m = [f"{botMes[0]}{p[1]}{botMes[1]}{winners['firstP']['name']}{botMes[2]}{winners['firstP']['winGolds']}{botMes[3]}{winners['secondP']['name']}{botMes[2]}{winners['secondP']['winGolds']}{botMes[3]}{winners['thirdP']['name']}{botMes[2]}{winners['thirdP']['winGolds']}{botMes[3]}",f"{botMes[4]}{settings['joinGold']}{botMes[5]}"]
             for pm in allP_m:
                 await self.highrise.send_whisper(p[0],pm)
                 await asyncio.sleep(1)
@@ -51,7 +54,8 @@ class Bot(BaseBot):
         for i in range(len(winners_id)):
             if not await users.inRoom(winners_id[i]):
                 continue
-            win_m = [f"\nHey {winners_name[i]}!\n\nCongratulations on winning {winners_place[i]} place in last week's game! You've won {winners_gold[i]} golds, and the owner will be tipping you today.\n",f"\nIf you haven't received your golds after 5:00PM, please send a message to {list(settings['owner'])[0]} and let them know.\n\nKeep up the great work, and we hope to see you in the next game!\n\nBest regards."]
+            botMes = await messages_conrole.getMessage(user,"game_end","02")
+            win_m = [f"{botMes[0]}{winners_name[i]}{botMes[1]}{winners_place[i]}{botMes[2]}{winners_gold[i]}{botMes[3]}",f"{botMes[4]}{list(settings['owner'])[0]}{botMes[5]}"]
             for mp in win_m:
                 await self.highrise.send_whisper(winners_id[i],mp)
                 await asyncio.sleep(1)
@@ -59,7 +63,7 @@ class Bot(BaseBot):
         #send message to owenrs to tip to winners
         owner_id = settings['owner'][list(settings['owner'])[0]]
         if await users.inRoom(owner_id):
-            owener_me = "\nHi owner tip to winners use [/winners] to see winners usernames"
+            owener_me = await messages_conrole.getMessage(user,"game_end","03")[0]
             # await self.highrise.send_whisper(owner_id,owener_me)
             await Bot.send_message(self,owner_id,owener_me)
             await pendingM.removePen(owner_id)
@@ -90,37 +94,41 @@ class Bot(BaseBot):
         print(f"{user.username} has joined room !")
         settings = game.getSettings() 
         await users.joinedRoom(user)
+        botMes = await messages_conrole.getMessage(user,"join_room","01")
         if await users.isOldUser(user.id):
-            await Bot.send_message(self,user.id,f"\nWelcome {user.username}")
+            await Bot.send_message(self,user.id,f"{botMes[0]}{user.username}")
         else:
-             await Bot.send_message(self,user.id, f"\nWelcome {user.username},\nWelcome to Gala World, are you ready to take the advanture!\nfor more info try '/help'")
+             await Bot.send_message(self,user.id, f"{botMes[0]}{user.username}{botMes[1]}")
         # game loop test when a member join
         # for understand what is game loop see README file
-        # await Bot.game_end(self)
+        # await Bot.game_end(self, user)
         if gameloop.isSunday():
             if not gameloop.isStocked():
                 if len(list(playersData()))>=3:
                     # pass
-                    await Bot.game_end(self)
+                    await Bot.game_end(self,user)
         if await pendingM.isPending(user.id):
-            winners = await gameloop.getWinnersTap(settings["lastWeek"])
+            poses = await messages_conrole.getMessage(user,"game_end","04")
+            winners = await gameloop.getWinnersTap(settings["lastWeek"],poses)
             wins_id = [winners[i][0] for i in range(len(winners))]
-            if user.id == settings['owner'][list(settings['owner'])[0]]:
-                await Bot.send_message(self,user.id,"Tip to /winners")
+            if (await owner_admin.isOwner(user)):
+                owener_me = await messages_conrole.getMessage(user,"game_end","03")[0]
+                await Bot.send_message(self,user.id,owener_me)
                 
             elif user.id in wins_id:
                 for w in winners:
                     if w[0] == user.id:
                         pos = w[2]
                         golds = w[3]
-                
-                win_m = [f"Hey {user.username}!\n\nCongratulations on winning {pos} place in last week's game! You've won {golds} golds, and the owner will be tipping you today.\n",f"\nIf you haven't received your golds after 5:00PM, please send a message to {list(settings['owner'])[0]} and let them know.\n\nKeep up the great work, and we hope to see you in the next game!\n\nBest regards."]
+                botMes = await messages_conrole.getMessage(user,"game_end","02")
+                win_m = [f"{botMes[0]}{user.username}{botMes[1]}{pos}{botMes[2]}{golds}{botMes[3]}",f"{botMes[4]}{list(settings['owner'])[0]}{botMes[5]}"]
                 for mp in win_m:
                     await Bot.send_message(self,user.id,mp)
                     await asyncio.sleep(1)
                 
             else:
-                allP_m = [f"\nHey {user.username}!\n\nLast week's game has ended and we have the winners:\n\n{winners[0][1]} won {winners[0][3]} Golds!\n{winners[1][1]} won {winners[1][3]} Golds!\n{winners[2][1]} won {winners[2][3]} Golds!",f"\nThis week's game has just started and you can join us by tipping {settings['joinGold']} Golds. Hurry up to secure your spot among the top three!\n\nTip fast to get your chance at the top.\n\nBest of luck and have fun!"]
+                botMes = await messages_conrole.getMessage(user,"game_end","01")
+                allP_m = [f"{botMes[0]}{user.username}{botMes[1]}{winners[0][1]}{botMes[2]}{winners[0][3]}{botMes[3]}{winners[1][1]}{botMes[2]}{winners[1][3]}{botMes[3]}{winners[2][1]}{botMes[2]}{winners[2][3]}{botMes[3]}",f"{botMes[4]}{settings['joinGold']}{botMes[5]}"]
                 for pm in allP_m:
                     await Bot.send_message(self,user.id,pm)
                     await asyncio.sleep(1)
@@ -146,7 +154,8 @@ class Bot(BaseBot):
         # help or h command
         #! info methods
         if message.startswith('help'):
-            resp = [f"\nInfo:\n 1. The game restart every sunday at 7:00 UTC \n 2. you need to collect wood and fishe and sell them for coins.\n 3. The player sorts in the leaderboard depense on coins.\n4. Tip {settings['joinGold']}G to join game\n5. [/reward] for reward info.","\nCommands:\n [/start]: for join game after tip\n [/inventory]: show inventory\n [/buy]: for buy new tools\n [/chop]: to collect woods\n [/fish]: to collect fishes\n [/sell]: to sell wood and fish for coins\n [/lb]: for show leaderboard"]
+            botMes = await messages_conrole.getMessage(user,"help","01") 
+            resp = [f"{botMes[0]}{settings['joinGold']}{botMes[1]}",botMes[2]]
             for ligne in resp:
                 await Bot.send_message(self,user.id,ligne)
                 await asyncio.sleep(0.01)
@@ -157,20 +166,21 @@ class Bot(BaseBot):
         
         # start command add player from tip list to game
         if message.startswith("admins"):
-            m = "\nAdmins:\n"
+            m = (await messages_conrole.getMessage(user,"admins","01"))[0]
             for admin in settings['admins']:
                 m+= f"- {admin}"
                 if await users.inRoom(settings['admins'][admin]):
-                    m+= " [In Room]"
+                    m+= (await messages_conrole.getMessage(user,"admins","02"))[0]
                 m+="\n"
             await Bot.send_message(self,user.id,m)
             return
         if message.startswith("winners"):
-            m = "\nWinners:\n"
-            for winner in (await gameloop.getWinnersTap(settings["lastWeek"])):
+            m = (await messages_conrole.getMessage(user,"winners","01"))[0]
+            poses = await messages_conrole.getMessage(user,"game_end","04")
+            for winner in (await gameloop.getWinnersTap(settings["lastWeek"],poses)):
                 m+= f"- {winner[1]}"
                 if await users.inRoom(winner[0]):
-                    m+= " [In Room]"
+                    m+= (await messages_conrole.getMessage(user,"winners","02"))[0]
                 m+="\n"
             await Bot.send_message(self,user.id,m)
             return
@@ -179,9 +189,12 @@ class Bot(BaseBot):
             re_tap = await leaderBorad(user.id)
             re_m = ""
             if len(re_tap) == 3:
-                re_m += f"\n[+]Your Position: {re_tap[2]}"
-            re_m += f"\n[+]Players: {re_tap[0]}"
-            re_m += f"\n[+]Best Players:"
+                botMes = (await messages_conrole.getMessage(user,'leaderboard','01'))[0]
+                re_m += f"{botMes}{re_tap[2]}"
+            botMes = (await messages_conrole.getMessage(user,'leaderboard','02'))[0]
+            re_m += f"{botMes}{re_tap[0]}"
+            botMes = (await messages_conrole.getMessage(user,'leaderboard','03'))[0]
+            re_m += f"{botMes}"
             
             # re_tap[1].reverse()
             for p in re_tap[1]:
@@ -191,13 +204,15 @@ class Bot(BaseBot):
         # time betwenn now to week end
         if message.startswith("end"):
             time = await gameloop.toWeekEnd()
-            m = f"\ndate to game end is:\n{time}"
+            botMes = (await messages_conrole.getMessage(user,'end','01'))[0]
+            m = f"{botMes}{time}"
             await Bot.send_message(self,user.id,m)
             return
         # golds that tipsed
         if message.startswith("prize"):
             golds = await gameloop.tippsed()
-            m = f"\nAll Golds in Tip:\n{golds} Golds"
+            botMes = (await messages_conrole.getMessage(user,'prize','01'))[0]
+            m = f"{botMes}{golds} Golds"
             await Bot.send_message(self,user.id,m)
             return
 
@@ -205,81 +220,97 @@ class Bot(BaseBot):
         if message.startswith("start"):
             
             if (isPlayer(user.id)):
-                await Bot.send_message(self,user.id,"you are already start!")
+                botMes = (await messages_conrole.getMessage(user,'start','01'))[0]
+                await Bot.send_message(self,user.id,botMes)
                 return
             if isTip(user.username):
                addPlayer(user)
-               await Bot.send_message(self,user.id,"Welcome, You can start playing now:)")
+               botMes = (await messages_conrole.getMessage(user,'start','02'))[0]
+               await Bot.send_message(self,user.id,botMes)
             else:
-                await Bot.send_message(self,user.id,f"\nYou need to tip {settings['joinGold']}G first.\nif you have a probleme try Use: [/probleme]")
+                botMes = await messages_conrole.getMessage(user,'start','03')
+                await Bot.send_message(self,user.id,f"{botMes[0]}{settings['joinGold']}{botMes[1]}")
             return
         
         #! admin
         # admin manging players 
         if message.startswith('admin'):
             if not user.username in list(settings["admins"].keys()):
-                await Bot.send_message(self,user.id,"You are not an admin")
+                botMes = (await messages_conrole.getMessage(user,'admin','01'))[0]
+                await Bot.send_message(self,user.id,botMes)
                 return
 
             parts_m = message.split()
             if not len(parts_m) == 3:
-                await Bot.send_message(self,user.id,"admin commands is:\n-/admin add [username]\n-/admin remove [username]")
+                botMes = (await messages_conrole.getMessage(user,'admin','02'))[0]
+                await Bot.send_message(self,user.id,botMes)
                 return
             try:
                 if (parts_m[1]=="add"):
                     addTipPlayer(parts_m[2])
-                    done_m = f"{parts_m[2]} has added to tip list\nfor remove a player try /admin remove username"
+                    botMes = (await messages_conrole.getMessage(user,'admin','03'))[0]
+                    done_m = f"\n{parts_m[2]}{botMes}"
                     await Bot.send_message(self,user.id,done_m)
                 elif (parts_m[1]=="remove"):
                     r1 = delPlayer(parts_m[2])
                     r2 = delFromTip(parts_m[2])
                     if r1 == 1 or r2 == 1:
-                        r_m = f"the {parts_m[2]} hase removed"
+                        botMes = await messages_conrole.getMessage(user,'admin','04')
+                        r_m = f"\n{botMes[0]}{parts_m[2]}{botMes[1]}"
                     else:
-                        r_m = f"there no player with username:{parts_m[2]}"
+                        botMes = (await messages_conrole.getMessage(user,'admin','05'))[0]
+                        r_m = f"\n{botMes}{parts_m[2]}"
                     await Bot.send_message(self,user.id,r_m)
-            except:await Bot.send_message(self,user.id,"no command found")
+            except:
+                botMes = (await messages_conrole.getMessage(user,'admin','06'))[0]
+                await Bot.send_message(self,user.id,botMes)
             return
         #! -----
         #! owner
         if message.startswith("owner"):
             if not await owner_admin.isOwner(user):
-                await Bot.send_message(self,user.id,"you are not the owner")
+                botMes = (await messages_conrole.getMessage(user,'owner','01'))[0]
+                await Bot.send_message(self,user.id,botMes)
                 return
             parts_m = message.split()
             if not len(parts_m) == 3:
-                await Bot.send_message(self,user.id,"owner commands is:\n-/owner addAdmin [username]\n-/owner removeAdmin [username]")
+                botMes = (await messages_conrole.getMessage(user,'owner','02'))[0]
+                await Bot.send_message(self,user.id,botMes)
                 return
             try:
                 
                 if(parts_m[1]=="addAdmin"):
                     foundUser = await users.getIdOldUser(parts_m[2])
                     if not foundUser:
-                        await Bot.send_message(self,user.id,"\nuser not found!\nNote:The user must be used command /help before")
+                        botMes = (await messages_conrole.getMessage(user,'owner','03'))[0]
+                        await Bot.send_message(self,user.id,botMes)
                         return
                     await owner_admin.addAdmin(parts_m[2],foundUser)
-                    await Bot.send_message(self,user.id,f"\n{parts_m[2]} has added to admins list")
+                    botMes = (await messages_conrole.getMessage(user,'owner','04'))[0]
+                    await Bot.send_message(self,user.id,f"\n{parts_m[2]}{botMes}")
                     return
                 elif(parts_m[1]=="removeAdmin"):
                     if not parts_m[2] in list(settings["admins"].keys()):
-                        await Bot.send_message(self,user.id,f"\n{parts_m[2]} not in admins list")
+                        botMes = (await messages_conrole.getMessage(user,'owner','05'))[0]
+                        await Bot.send_message(self,user.id,f"\n{parts_m[2]}{botMes}")
                         return
                     await owner_admin.removeAdmin(parts_m[2])
-                    await Bot.send_message(self,user.id,f"\n{parts_m[2]} has removed from admins list")
+                    botMes = (await messages_conrole.getMessage(user,'owner','06'))[0]
+                    await Bot.send_message(self,user.id,f"\n{parts_m[2]}{botMes}")
                     return
             except:pass
-            await Bot.send_message(self,user.id,"no command found [/owner]")
+            botMes = (await messages_conrole.getMessage(user,'owner','07'))[0]
+            await Bot.send_message(self,user.id,botMes)
             return
             
         #! ------
         # /p problme command
         if message.startswith("probleme"):
-            m = "\nIf you have a probleme send to one of admins message and let him know.\n\nAdmins:\n"
+            m = (await messages_conrole.getMessage(user,'probleme','01'))[0]
             for admin in settings['admins']:
                 m+= f"-{admin}"
                 if await users.inRoom(settings['admins'][admin]):
-                    m+= " [In Room]"
-                
+                    m+= (await messages_conrole.getMessage(user,'probleme','02'))[0]
                 m+="\n"
             await Bot.send_message(self,user.id,m)
             return
@@ -290,7 +321,8 @@ class Bot(BaseBot):
             if (isPlayer(user.id)):
                 pass
             else:
-                await Bot.send_message(self,user.id,f"Hi {user.username} you didn't join game yet.\nTry /start")
+                botMes = await messages_conrole.getMessage(user,'not_player','01')
+                await Bot.send_message(self,user.id,f"{botMes[0]}{user.username}{botMes[1]}")
                 return
             
         
@@ -302,26 +334,33 @@ class Bot(BaseBot):
         if message.startswith("chop"):
             re = await game.chop(user.id)
             if type(re) == int:
-                re = f"You got {re} Woods\nYou can chop wood again after {settings['chopToolSleep']+1} min"
-            
-            await Bot.send_message(self,user.id,f"To chop wood again run /chop after {re}min")
+                botMes = await messages_conrole.getMessage(user,"chop","01")
+                re = f"{botMes[0]}{re}{botMes[1]}{settings['chopToolSleep']+1}{botMes[2]}"
+                await Bot.send_message(self,user.id,re)
+                return
+            botMes = await messages_conrole.getMessage(user,"chop","02")
+            await Bot.send_message(self,user.id,f"{botMes[0]}{re}{botMes[1]}")
             return
         ## fishing command
         if message.startswith("fish"):
             re = await game.fish(user.id)
             if type(re) == int:
-                re = f"You got {re} fishs\nYou can fishing again after {settings['fishToolSleep']+1} min"
-            
-            await Bot.send_message(self,user.id,f"To fishing again run /fish after {re}min")
+                botMes = await messages_conrole.getMessage(user,"fish","01")
+                re = f"{botMes[0]}{re}{botMes[1]}{settings['fishToolSleep']+1}{botMes[2]}"
+                await Bot.send_message(self,user.id,re)
+                return
+            botMes = await messages_conrole.getMessage(user,"fish","02")
+            await Bot.send_message(self,user.id,f"{botMes[0]}{re}{botMes[1]}")
             return
 
         if message.startswith("inventory"):
             data = playersData()
             player = data[user.id]
-            ret_m = f"\nInventory\n[+]Coins = {player['resourses']['coins']} Gala\n"
-            ret_m += f"[+]Tools:\n  -{player['tools']['axe']} Axe\n  -{player['tools']['rod']} fishing rod\n"
-            ret_m += f"[+]Resources:\n  -Woods: {player['resourses']['wood']}\n  -Fishs: {player['resourses']['fish']}\n"
-            ret_m += "Note: use [/sell] to sell resourses"
+            botMes = await messages_conrole.getMessage(user,"inventory","01")
+            ret_m = f"{botMes[0]}{player['resourses']['coins']}{botMes[1]}"
+            ret_m += f"{botMes[2]}{player['tools']['axe']}{botMes[3]}{player['tools']['rod']}{botMes[4]}"
+            ret_m += f"{botMes[5]}{player['resourses']['wood']}{botMes[6]}{player['resourses']['fish']}{botMes[7]}"
+            ret_m += botMes[8]
             await Bot.send_message(self,user.id,ret_m)
             return
         # buy command
@@ -343,12 +382,14 @@ class Bot(BaseBot):
                         return
                     
                 except:pass
-                await Bot.send_message(self,user.id,'item not found! \nyou need to select number for item from list ,try:[/buy]')
+                botMes = (await messages_conrole.getMessage(user,"buy","02"))[0]
+                await Bot.send_message(self,user.id,botMes)
                 
             return
         if message.startswith("sell"):
             # await game.sellItems(user.id)
-            await Bot.send_message(self,user.id,f"You got {await game.sellItems(user.id)} Gala")
+            botMes = await messages_conrole.getMessage(user,"sell","01")
+            await Bot.send_message(self,user.id,f"{botMes[0]}{await game.sellItems(user.id)}{botMes[1]}")
             return
         #! ---------------
         #! other commands that for fun in room
@@ -361,9 +402,11 @@ class Bot(BaseBot):
                     if parts_m[1] in emotes:
                         await self.highrise.send_emote(parts_m[1], user.id)
                         return
-                    await Bot.send_message(self,user.id,"\nEmote not found")
+                    botMes = (await messages_conrole.getMessage(user,"emote","01"))[0]
+                    await Bot.send_message(self,user.id,botMes)
                     return
-                await Bot.send_message(self,user.id,"\ntry: /emote [emote name]")
+                botMes = (await messages_conrole.getMessage(user,"emote","02"))[0]
+                await Bot.send_message(self,user.id,botMes)
                 return
             except:print("error in emotes")
         # dance command
@@ -381,7 +424,8 @@ class Bot(BaseBot):
                                 await self.highrise.send_emote(dance, roomUser.id)
                             return
                         else:
-                            await Bot.send_message(self,user.id,"\nYou can't make users dance because your not one of players or admins")
+                            botMes = (await messages_conrole.getMessage(user,"dance","01"))[0]
+                            await Bot.send_message(self,user.id,botMes)
                             return
                     if parts_m[1] in dances:
                         await self.highrise.send_emote(parts_m[1], user.id)
@@ -397,7 +441,8 @@ class Bot(BaseBot):
                 ran_joke = await joke.get_random_short_joke()
                 await Bot.send_message(self,user.id,f"\n{ran_joke}")
             except:
-                await Bot.send_message(self,user.id,"\nI don't fell good to tells jokes :(...")
+                botMes = (await messages_conrole.getMessage(user,"joke","01"))[0]
+                await Bot.send_message(self,user.id,botMes)
                 print("there is a error in api of joke")
             return
         
