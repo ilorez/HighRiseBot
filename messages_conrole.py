@@ -2,7 +2,7 @@ import json
 from users import getUserLang
 
 #load BotMessages.json that contain all message bot say
-with open("data/BotMessages.json","r") as f:
+with open("data/BotMessages.json","r",encoding='utf-8') as f:
     messagesData = json.load(f)
 
 # return message message from botMessages by using name and num of language and lang that come from user profile

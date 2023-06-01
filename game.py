@@ -6,7 +6,7 @@ import pytz
 import random
 # settings json
 def getSettings():
-    with open("settings.json",'r') as f:
+    with open("settings.json",'r',encoding='utf-8') as f:
         return json.load(f) 
 
 # set rousours (coins, woods, fishs) to player by id
@@ -60,9 +60,12 @@ async def buyItem(id,num):
         data[id] = player
         setPlayerData(data)
         
-        return f"\nYou have get {tType} {tooln} by {prix}\nYou still have {coins}Gala"
+        # return f"\nYou have get {tType} {tooln} by {prix}\nYou still have {coins}Gala"
+        return [tType,tooln,prix,coins]
     
-    return f"You need {-(coins-prix)} Gala to get this tool"
+    # return f"You need {-(coins-prix)} Gala to get this tool"
+    need = prix - coins
+    return [False, need ]
 
 async def chop(id):
     data = playersData()

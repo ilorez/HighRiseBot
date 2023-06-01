@@ -9,7 +9,7 @@ import pytz
 #! working with players.json
 # return players data after covert it from json to dict 
 def playersData():
-    with open('players.json', 'r') as file:
+    with open('players.json', 'r',encoding='utf-8') as file:
         data = json.load(file)
     return data
 # set data in players.json function
@@ -92,12 +92,12 @@ async def leaderBorad(id):
 #! working with tipPlayers.json
 # return true if player in tipPlayers
 def isTip(username):
-    with open('tipPlayers.json', 'r') as file:
+    with open('tipPlayers.json', 'r',encoding='utf-8') as file:
         data = json.load(file)
     return username in data['tips']
 # add user to tipPlayers
 def addTipPlayer(username):
-    with open('tipPlayers.json', 'r') as file:
+    with open('tipPlayers.json', 'r',encoding='utf-8') as file:
         data = json.load(file)
     try:
         data["tips"].append(username)
@@ -107,7 +107,7 @@ def addTipPlayer(username):
     except:return False
 # remove player from tipPlayer return "done" and "username not found"
 def delFromTip(username):
-    with open('tipPlayers.json', 'r') as file:
+    with open('tipPlayers.json', 'r',encoding='utf-8') as file:
         data = json.load(file)
     try:
         data["tips"].remove(username)
