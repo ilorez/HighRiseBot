@@ -165,7 +165,6 @@ class Bot(BaseBot):
             return
         
         # /lang  command: for show or change language
-        #TODO add lang to botMessages
         if message.startswith("lang"):
             langs_list = settings["languages"]
             parts_m = message.split()
@@ -395,20 +394,30 @@ class Bot(BaseBot):
             if len(parts_m) == 1:
                 a_prixs = settings['toolsPrix']['axe'] 
                 r_prixs = settings['toolsPrix']['rod'] 
-                resp = f"\n\U0001FA93 Axe:\n\t1.Wood -{a_prixs['wood']}Gala\n\t2.Iron -{a_prixs['iron']}Gala\n\t3.Gold -{ a_prixs['gold']}Gala\n\t4.Diamond -{a_prixs['diamond']}Gala"
-                resp += f"\n\U0001F3A3 Fishing rod:\n\t5.Wood -{r_prixs['wood']}Gala\n\t6.Iron -{r_prixs['iron']}Gala\n\t7.Gold -{ r_prixs['gold']}Gala\n\t8.Diamond -{r_prixs['diamond']}Gala"
-                resp +="\n[+]Use /buy [number of item 1-8]"
-                await Bot.send_message(self,user.id,resp)
+                a_toolRange = settings['toolRange']['axe']
+                r_toolRange = settings['toolRange']['rod']
+                botMes = await messages_conrole.getMessage(user,"buy","01")
+                resp = [f"{botMes[0]}{a_prixs['wood']}{botMes[-2]}{a_toolRange['wood'][0]}{botMes[-1]}{a_toolRange['wood'][1]}{botMes[1]}{a_prixs['iron']}{botMes[-2]}{a_toolRange['iron'][0]}{botMes[-1]}{a_toolRange['iron'][1]}{botMes[2]}{ a_prixs['gold']}{botMes[-2]}{a_toolRange['gold'][0]}{botMes[-1]}{a_toolRange['gold'][1]}{botMes[3]}{a_prixs['diamond']}{botMes[-2]}{a_toolRange['diamond'][0]}{botMes[-1]}{a_toolRange['diamond'][1]}"]
+                resp.append(f"{botMes[4]}{r_prixs['wood']}{botMes[-2]}{r_toolRange['wood'][0]}{botMes[-1]}{r_toolRange['wood'][1]}{botMes[5]}{r_prixs['iron']}{botMes[-2]}{r_toolRange['iron'][0]}{botMes[-1]}{r_toolRange['iron'][1]}{botMes[6]}{ r_prixs['gold']}{botMes[-2]}{r_toolRange['gold'][0]}{botMes[-1]}{r_toolRange['gold'][1]}{botMes[7]}{r_prixs['diamond']}{botMes[-2]}{r_toolRange['diamond'][0]}{botMes[-1]}{r_toolRange['diamond'][1]}{botMes[8]}")
+                # resp +="\n[+]Use /buy [number of item 1-8]"
+                for m in resp:
+                    await Bot.send_message(self,user.id,m)
             else:
                 # when buy tool
                 try:
                     num = int(parts_m[1])
                     if num <=8 and num >=1:
-                        await Bot.send_message(self,user.id,await game.buyItem(user.id,num))
+                        b_result = await game.buyItem(user.id,num)
+                        if b_result[0]:
+                            botMes = await messages_conrole.getMessage(user,"buy","02")
+                            m = f"{botMes[0]}{b_result[0]}{botMes[1]}{b_result[1]}{botMes[2]}{b_result[2]}{botMes[3]}{b_result[3]}{botMes[4]}"
+                        else:
+                            botMes = await messages_conrole.getMessage(user,"buy","03")
+                            m = f"{botMes[0]}{b_result[1]}{botMes[1]}"
+                        await Bot.send_message(self,user.id,m)
                         return
-                    
                 except:pass
-                botMes = (await messages_conrole.getMessage(user,"buy","02"))[0]
+                botMes = (await messages_conrole.getMessage(user,"buy","04"))[0]
                 await Bot.send_message(self,user.id,botMes)
                 
             return
