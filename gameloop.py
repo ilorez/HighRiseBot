@@ -22,13 +22,13 @@ def get_utc_date():
 
 # import and return all data players form data/allDataPlayers.json 
 def allDataPlayers():
-    with open("data/allDataPlayers.json","r") as f:
+    with open("data/allDataPlayers.json","r",encoding='utf-8') as f:
         allData = json.load(f)
     return allData
 
 # import and return all winners form data/winners.json 
 def allWinners():
-    with open("data/winners.json","r") as f:
+    with open("data/winners.json","r",encoding='utf-8') as f:
         winners = json.load(f)
     return winners
 
@@ -114,7 +114,7 @@ async def setDataZero():
         json.dump({"tips": []},f)
 
 async def getNextSettings():
-    with open("data/nextSettings.json","r") as f:
+    with open("data/nextSettings.json","r",encoding='utf-8') as f:
         data = json.load(f)
     return data
 

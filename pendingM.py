@@ -2,7 +2,7 @@ import json
 from users import getAllUsers
 # get pending messages from pendig_messages.json
 async def getPindings():
-    with open("data/pending_messages.json","r") as f:
+    with open("data/pending_messages.json","r",encoding='utf-8') as f:
         ms = json.load(f)
     return ms
 
