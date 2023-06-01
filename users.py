@@ -3,7 +3,7 @@ from game import getSettings
 
 # import and convert data/allUsers.json to dict
 async def getAllUsers():
-    with open("data/allUsers.json","r") as f:
+    with open("data/allUsers.json","r",encoding='utf-8') as f:
         users = json.load(f)
     return users
 
@@ -28,7 +28,7 @@ async def addUser(user):
 
 #get data from inRoom.json
 async def getInRoom():
-    with open("data/inRoom.json","r") as f:
+    with open("data/inRoom.json","r",encoding='utf-8') as f:
         data = json.load(f)
     return data
 
