@@ -126,7 +126,7 @@ async def updateSettings():
 
 # this function setLastweek in nxetSetting.json
 async def setLastWeek(date):
-    data = getNextSettings()
+    data = await getNextSettings()
     data["lastWeek"] = date
     with open("data/nextSettings.json","w") as f:
         json.dump(data,f)
