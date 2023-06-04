@@ -21,5 +21,35 @@
       "tools": { "axe": "wood", "rod": "wood" },
       "resourses": { "wood": 7, "fish": 0, "coins": 15 }
     }
+  },
+  "2023/06/04": {
+    "6452e89111045823a622c6e1": {
+      "name": "JeoParty",
+      "lastFish": "2023-06-03 18:36:00",
+      "lastChop": "2023-06-03 18:36:07",
+      "tools": { "axe": "wood", "rod": "wood" },
+      "resourses": { "wood": 5, "fish": 0, "coins": 78 }
+    },
+    "61897928ecd328de4bec8339": {
+      "name": "Shelooock",
+      "lastFish": "2023-06-03 13:52:38",
+      "lastChop": "2023-06-03 21:23:15",
+      "tools": { "axe": "wood", "rod": "wood" },
+      "resourses": { "wood": 29, "fish": 5, "coins": 24 }
+    },
+    "57973fbba69778de2550b85d": {
+      "name": "romeo1",
+      "lastFish": "2023-06-01 10:46:38",
+      "lastChop": "2023-06-01 10:46:16",
+      "tools": { "axe": "wood", "rod": "wood" },
+      "resourses": { "wood": 9, "fish": 0, "coins": 5 }
+    },
+    "6438fe9e8f9331490d5b7bb9": {
+      "name": "VitalKieran",
+      "lastFish": "2023-06-01 20:26:12",
+      "lastChop": "2023-06-01 20:26:10",
+      "tools": { "axe": "wood", "rod": "wood" },
+      "resourses": { "wood": 2, "fish": 0, "coins": 20 }
+    }
   }
 }

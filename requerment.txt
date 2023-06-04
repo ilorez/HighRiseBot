@@ -1,2 +1,0 @@
-pip install highrise-bot-sdk
-pip install asyncio

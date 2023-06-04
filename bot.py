@@ -24,14 +24,12 @@ class Bot(BaseBot):
     
 
     async def game_end(self,user):
-        await pendingM.setPendingM()
-        today = gameloop.get_utc_date()
-        await gameloop.stock(today)
-        # send message that game end to all players
-        settings = game.getSettings()
-        players = await getPlayers()
-        settings = game.getSettings()
-        winners = gameloop.allWinners()[today]
+        await pendingM.setPendingM() # put allUsers.json in pending_messages
+        today = gameloop.get_utc_date() # return today utc on format yyyy/mm/dd
+        await gameloop.stock(today) #stock players data and winners data
+        settings = game.getSettings() # get settings.json
+        players = await getPlayers() # return table of players storted by GALA coins
+        winners = gameloop.allWinners()[today] # return all winners of everyweek
         winners_id = [winners["firstP"]["id"],winners["secondP"]["id"],winners["thirdP"]["id"]]
         winners_name = [winners["firstP"]["name"],winners["secondP"]["name"],winners["thirdP"]["name"]]
         winners_gold = [winners["firstP"]["winGolds"],winners["secondP"]["winGolds"],winners["thirdP"]["winGolds"]]
@@ -42,7 +40,7 @@ class Bot(BaseBot):
         # send messageto playes that notice them game end
         for p in players:
             # if user is not in room or if user is one of winner don't do anything
-            if (not await users.inRoom(p[0]))or(p[0] in winners_id):
+            if (not (await users.inRoom(p[0])))or(p[0] in winners_id):
                 continue
             botMes = await messages_conrole.getMessage(user,"game_end","01")
             allP_m = [f"{botMes[0]}{p[1]}{botMes[1]}{winners['firstP']['name']}{botMes[2]}{winners['firstP']['winGolds']}{botMes[3]}{winners['secondP']['name']}{botMes[2]}{winners['secondP']['winGolds']}{botMes[3]}{winners['thirdP']['name']}{botMes[2]}{winners['thirdP']['winGolds']}{botMes[3]}",f"{botMes[4]}{settings['joinGold']}{botMes[5]}"]
@@ -63,7 +61,7 @@ class Bot(BaseBot):
         #send message to owenrs to tip to winners
         owner_id = settings['owner'][list(settings['owner'])[0]]
         if await users.inRoom(owner_id):
-            owener_me = await messages_conrole.getMessage(user,"game_end","03")[0]
+            owener_me = (await messages_conrole.getMessage(user,"game_end","03"))[0]
             # await self.highrise.send_whisper(owner_id,owener_me)
             await Bot.send_message(self,owner_id,owener_me)
             await pendingM.removePen(owner_id)
@@ -112,7 +110,7 @@ class Bot(BaseBot):
             winners = await gameloop.getWinnersTap(settings["lastWeek"],poses)
             wins_id = [winners[i][0] for i in range(len(winners))]
             if (await owner_admin.isOwner(user)):
-                owener_me = await messages_conrole.getMessage(user,"game_end","03")[0]
+                owener_me = (await messages_conrole.getMessage(user,"game_end","03"))[0]
                 await Bot.send_message(self,user.id,owener_me)
                 
             elif user.id in wins_id:

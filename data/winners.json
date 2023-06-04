@@ -20,5 +20,27 @@
       "gala": 15,
       "winGolds": 21
     }
+  },
+  "2023/06/04": {
+    "allGolds": 40,
+    "roomReward": 13,
+    "firstP": {
+      "id": "6452e89111045823a622c6e1",
+      "name": "JeoParty",
+      "gala": 78,
+      "winGolds": 14
+    },
+    "secondP": {
+      "id": "61897928ecd328de4bec8339",
+      "name": "Shelooock",
+      "gala": 24,
+      "winGolds": 8
+    },
+    "thirdP": {
+      "id": "6438fe9e8f9331490d5b7bb9",
+      "name": "VitalKieran",
+      "gala": 20,
+      "winGolds": 5
+    }
   }
 }
